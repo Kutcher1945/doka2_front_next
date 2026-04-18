@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useMusicContext } from './MusicContext'
 
 interface LandingHeaderProps {
   onSignIn: () => void
@@ -15,6 +16,9 @@ const NAV_ITEMS = [
 
 export function LandingHeader({ onSignIn, onSignUp }: LandingHeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
+  const music = useMusicContext()
+  const playing = music?.isPlaying ?? false
+  const toggleMusic = music?.toggle ?? (() => {})
 
   function scrollTo(id: string) {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -86,7 +90,7 @@ export function LandingHeader({ onSignIn, onSignUp }: LandingHeaderProps) {
               ))}
             </nav>
 
-            {/* Desktop auth buttons */}
+            {/* Desktop auth + music buttons */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }} className="landing-nav-desktop">
               <button
                 onClick={onSignIn}
@@ -141,6 +145,54 @@ export function LandingHeader({ onSignIn, onSignUp }: LandingHeaderProps) {
                 }}
               >
                 Регистрация
+              </button>
+
+              {/* Music toggle — same style as Вход */}
+              <button
+                onClick={toggleMusic}
+                title={playing ? 'Пауза' : 'Включить музыку'}
+                style={{
+                  padding: '1rem 2rem',
+                  borderRadius: '1.2rem',
+                  fontSize: '1.6rem',
+                  fontWeight: 600,
+                  fontFamily: "'Colus', 'Gotham Pro', sans-serif",
+                  color: '#fff',
+                  background: playing ? 'rgba(141,94,244,0.12)' : 'transparent',
+                  border: '2px solid rgba(141,94,244,0.6)',
+                  cursor: 'pointer',
+                  transition: 'all 0.25s',
+                  boxShadow: playing ? '0 0 28px rgba(141,94,244,0.35)' : '0 0 20px rgba(141,94,244,0.15)',
+                  display: 'flex', alignItems: 'center', gap: '0.8rem',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = 'rgba(141,94,244,0.12)'
+                  e.currentTarget.style.borderColor = 'rgba(141,94,244,0.9)'
+                  e.currentTarget.style.boxShadow = '0 0 28px rgba(141,94,244,0.35)'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = playing ? 'rgba(141,94,244,0.12)' : 'transparent'
+                  e.currentTarget.style.borderColor = 'rgba(141,94,244,0.6)'
+                  e.currentTarget.style.boxShadow = playing ? '0 0 28px rgba(141,94,244,0.35)' : '0 0 20px rgba(141,94,244,0.15)'
+                }}
+              >
+                {playing ? (
+                  <span style={{ display: 'flex', alignItems: 'flex-end', gap: '2.5px', height: '16px' }}>
+                    {[1, 2, 3, 4].map(i => (
+                      <span key={i} style={{
+                        display: 'block', width: '3px', borderRadius: '2px',
+                        background: '#c9aaff',
+                        boxShadow: '0 0 6px rgba(185,153,253,0.9)',
+                        animation: `musicBar${i} 0.${4 + i}s ease-in-out infinite alternate`,
+                      }} />
+                    ))}
+                  </span>
+                ) : (
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                  </svg>
+                )}
+                DnB
               </button>
             </div>
 
@@ -301,6 +353,10 @@ export function LandingHeader({ onSignIn, onSignUp }: LandingHeaderProps) {
           .landing-nav-desktop { display: none !important; }
           .landing-nav-mobile { display: flex !important; }
         }
+        @keyframes musicBar1 { from { height: 4px } to { height: 14px } }
+        @keyframes musicBar2 { from { height: 8px } to { height: 16px } }
+        @keyframes musicBar3 { from { height: 12px } to { height: 6px } }
+        @keyframes musicBar4 { from { height: 6px } to { height: 13px } }
       `}</style>
     </>
   )

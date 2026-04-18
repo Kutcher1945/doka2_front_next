@@ -91,7 +91,7 @@ export default function WithdrawalPage() {
   }
 
   return (
-    <div style={{ minHeight: '100%', background: '#080710', padding: '3.2rem', display: 'flex', flexDirection: 'column', gap: '2.4rem', maxWidth: '72rem', margin: '0 auto' }}>
+    <div style={{ minHeight: '100%', background: '#080710', padding: '3.2rem 3.2rem 3.2rem 4rem', display: 'flex', flexDirection: 'column', gap: '2.4rem' }}>
 
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '1.6rem' }}>

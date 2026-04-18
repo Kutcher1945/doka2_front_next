@@ -6,16 +6,6 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/page.js"
-    ],
-    "/api/auth/[...nextauth]/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/auth/[...nextauth]/route.js"
-    ],
     "/cabinet/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -25,6 +15,16 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/cabinet/page.js"
+    ],
+    "/api/auth/[...nextauth]/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/auth/[...nextauth]/route.js"
+    ],
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/page.js"
     ],
     "/cabinet/lobby/page": [
       "static/chunks/webpack.js",
@@ -36,6 +36,31 @@
       "static/chunks/main-app.js",
       "static/chunks/app/cabinet/wallet/page.js"
     ],
+    "/cabinet/profile/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/cabinet/profile/page.js"
+    ],
+    "/cabinet/profile/settings/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/cabinet/profile/settings/page.js"
+    ],
+    "/cabinet/support/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/cabinet/support/page.js"
+    ],
+    "/cabinet/wallet/replenish/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/cabinet/wallet/replenish/page.js"
+    ],
+    "/cabinet/wallet/withdrawal/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/cabinet/wallet/withdrawal/page.js"
+    ],
     "/cabinet/history/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -45,41 +70,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/cabinet/friends/page.js"
-    ],
-    "/cabinet/profile/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/cabinet/profile/page.js"
-    ],
-    "/cabinet/support/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/cabinet/support/page.js"
-    ],
-    "/cabinet/lobby/create/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/cabinet/lobby/create/page.js"
-    ],
-    "/cabinet/profile/settings/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/cabinet/profile/settings/page.js"
-    ],
-    "/api/auth/steam/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/auth/steam/route.js"
-    ],
-    "/api/auth/steam/callback/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/auth/steam/callback/route.js"
-    ],
-    "/cabinet/wallet/withdrawal/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/cabinet/wallet/withdrawal/page.js"
     ]
   }
 }

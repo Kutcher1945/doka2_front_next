@@ -4,7 +4,6 @@ import { Suspense } from 'react'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { CabinetHeader } from '@/components/layout/CabinetHeader'
 import { SessionRefresher } from '@/components/providers/SessionRefresher'
-import { lobbyApi, walletApi } from '@/lib/api'
 import axios from 'axios'
 import type { User, UserWallet } from '@/types'
 
@@ -34,7 +33,8 @@ export default async function CabinetLayout({ children }: { children: React.Reac
   const token = (session as { auth_token?: string }).auth_token
   if (!token) redirect('/')
 
-  const { user, wallet } = await getServerData(token)
+  const { user: freshUser, wallet } = await getServerData(token)
+  const user = freshUser ?? (session as { user?: User }).user ?? null
   if (!user) redirect('/')
 
   return (

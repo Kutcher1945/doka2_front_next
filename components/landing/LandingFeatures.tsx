@@ -1,5 +1,7 @@
 'use client'
 
+import { ParticlesCanvas } from './ParticlesCanvas'
+
 interface LandingFeaturesProps {
   onSignUp: () => void
 }
@@ -8,7 +10,7 @@ export function LandingFeatures({ onSignUp }: LandingFeaturesProps) {
   return (
     <section
       id="features"
-      style={{ padding: '9.6rem 0', marginBottom: '14.5rem', position: 'relative', overflow: 'hidden' }}
+      style={{ padding: '9.6rem 0', position: 'relative', overflow: 'hidden' }}
     >
       <style>{`
         @media (max-width: 900px) {
@@ -18,6 +20,8 @@ export function LandingFeatures({ onSignUp }: LandingFeaturesProps) {
           .ftr-card { max-width: 100% !important; }
         }
       `}</style>
+
+      <ParticlesCanvas count={55} />
 
       {/* Ambient orbs */}
       <div style={{ position:'absolute', top:'-10rem', left:'-15rem', width:'60rem', height:'60rem', borderRadius:'50%', background:'radial-gradient(circle, rgba(141,94,244,0.07) 0%, transparent 65%)', pointerEvents:'none', zIndex:0 }} />
@@ -136,44 +140,58 @@ function FeatureRow({ flip, hero, heroGlow, card, title, text }: {
     }}>
       {/* Card */}
       <div className="ftr-card" style={{ flex:'1 1 0', minWidth:0, maxWidth:'55rem' }}>
-        {/* Glassmorphism card */}
+        {/* Neon border wrapper */}
         <div style={{
-          background:'linear-gradient(160deg, rgba(20,14,34,0.95) 0%, rgba(12,8,22,0.98) 100%)',
-          border:'1px solid rgba(141,94,244,0.2)',
           borderRadius:'2.4rem',
-          overflow:'hidden',
-          boxShadow:'0 8px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(141,94,244,0.1)',
+          padding:'1.5px',
+          background:'linear-gradient(135deg, rgba(141,94,244,0.7) 0%, rgba(56,189,248,0.15) 40%, rgba(141,94,244,0.5) 70%, rgba(34,197,94,0.2) 100%)',
+          boxShadow:'0 0 24px rgba(141,94,244,0.22), 0 0 60px rgba(141,94,244,0.1), 0 8px 40px rgba(0,0,0,0.5)',
         }}>
-          {/* Mockup area */}
-          <div style={{ padding:'2.4rem 2.4rem 0' }}>
-            {card}
-          </div>
-          {/* Text area */}
-          <div style={{ padding:'2.4rem 3.2rem 3.2rem' }}>
-            <div style={{ width:'4rem', height:'2px', background:'linear-gradient(90deg,#8D5EF4,transparent)', marginBottom:'1.6rem', borderRadius:'2px' }} />
-            <h4 style={{ fontFamily:"'Colus', 'Gotham Pro', sans-serif", fontSize:'2.4rem', color:'#fff', margin:'0 0 1rem' }}>{title}</h4>
-            <p style={{ fontFamily:"'Gotham Pro', sans-serif", fontSize:'1.4rem', lineHeight:1.6, color:'rgba(255,255,255,0.55)', margin:0 }}>{text}</p>
+          {/* Inner card */}
+          <div style={{
+            background:'linear-gradient(160deg, rgba(20,14,34,0.97) 0%, rgba(10,8,18,0.99) 100%)',
+            borderRadius:'calc(2.4rem - 1.5px)',
+            overflow:'hidden',
+          }}>
+            {/* Mockup area */}
+            <div style={{ padding:'2.4rem 2.4rem 0' }}>
+              {card}
+            </div>
+            {/* Text area */}
+            <div style={{ padding:'2.4rem 3.2rem 3.2rem' }}>
+              <div style={{ width:'4rem', height:'2px', background:'linear-gradient(90deg,#8D5EF4,transparent)', marginBottom:'1.6rem', borderRadius:'2px' }} />
+              <h4 style={{ fontFamily:"'Colus', 'Gotham Pro', sans-serif", fontSize:'2.4rem', color:'#fff', margin:'0 0 1rem' }}>{title}</h4>
+              <p style={{ fontFamily:"'Gotham Pro', sans-serif", fontSize:'1.4rem', lineHeight:1.6, color:'rgba(255,255,255,0.55)', margin:0 }}>{text}</p>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Hero */}
-      <div className="ftr-hero-wrap" style={{ flex:'0 0 auto', position:'relative', width:'46rem', height:'46rem' }}>
+      <div className="ftr-hero-wrap" style={{ flex:'0 0 auto', position:'relative', width:'58rem', height:'58rem' }}>
         {/* Ground glow */}
         <div style={{
           position:'absolute', bottom:'1rem', left:'50%', transform:'translateX(-50%)',
-          width:'30rem', height:'5rem', borderRadius:'50%',
+          width:'38rem', height:'6rem', borderRadius:'50%',
           background:`radial-gradient(ellipse, ${heroGlow} 0%, transparent 70%)`,
-          filter:'blur(10px)', pointerEvents:'none',
+          filter:'blur(14px)', pointerEvents:'none',
+        }} />
+        {/* Neon halo ring */}
+        <div style={{
+          position:'absolute', top:'50%', left:'50%', transform:'translate(-50%,-50%)',
+          width:'44rem', height:'44rem', borderRadius:'50%',
+          background:`radial-gradient(ellipse, ${heroGlow.replace('0.3','0.06').replace('0.4','0.08')} 0%, transparent 65%)`,
+          pointerEvents:'none',
         }} />
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={hero} alt="" draggable={false} style={{
           width:'100%', height:'100%', objectFit:'contain',
           transition:'transform 0.4s ease, filter 0.4s ease',
           userSelect:'none',
+          filter:`drop-shadow(0 0 18px ${heroGlow.replace('0.3','0.55').replace('0.4','0.65')}) drop-shadow(0 0 40px ${heroGlow.replace('0.3','0.25').replace('0.4','0.3')})`,
         }}
-        onMouseEnter={e => { e.currentTarget.style.transform='scale(1.06) translateY(-8px)'; e.currentTarget.style.filter=`drop-shadow(0 0 30px ${heroGlow})` }}
-        onMouseLeave={e => { e.currentTarget.style.transform='scale(1) translateY(0)'; e.currentTarget.style.filter='none' }}
+        onMouseEnter={e => { e.currentTarget.style.transform='scale(1.06) translateY(-10px)'; e.currentTarget.style.filter=`drop-shadow(0 0 30px ${heroGlow.replace('0.3','0.85').replace('0.4','0.9')}) drop-shadow(0 0 60px ${heroGlow.replace('0.3','0.45').replace('0.4','0.5')})` }}
+        onMouseLeave={e => { e.currentTarget.style.transform='scale(1) translateY(0)'; e.currentTarget.style.filter=`drop-shadow(0 0 18px ${heroGlow.replace('0.3','0.55').replace('0.4','0.65')}) drop-shadow(0 0 40px ${heroGlow.replace('0.3','0.25').replace('0.4','0.3')})` }}
         />
       </div>
     </div>
@@ -184,48 +202,49 @@ function FeatureRow({ flip, hero, heroGlow, card, title, text }: {
 
 function RatingMockup() {
   const players = [
-    { rank: 1, name: 'NICK NAME', stars: 5, color: '#FFD700' },
-    { rank: 2, name: 'NICK NAME', stars: 4, color: '#C0C0C0' },
-    { rank: 3, name: 'NICK NAME', stars: 4, color: '#CD7F32' },
+    { rank: 1, name: '影丸  KAGEMARU', stars: 5, color: '#FFD700' },
+    { rank: 2, name: '雷斬  RAIZAN', stars: 4, color: '#C0C0C0' },
+    { rank: 3, name: '炎鬼  ENOONI', stars: 4, color: '#CD7F32' },
   ]
   const medals = ['⬧', '◆', '◈', '◇', '◦']
   return (
-    <div style={{ borderRadius:'1.2rem', overflow:'hidden', background:'rgba(0,0,0,0.3)', border:'1px solid rgba(255,255,255,0.06)' }}>
+    <div style={{ borderRadius:'1.2rem', overflow:'hidden', background:'rgba(0,0,0,0.4)', border:'1px solid rgba(141,94,244,0.25)', boxShadow:'0 0 30px rgba(141,94,244,0.12), inset 0 1px 0 rgba(141,94,244,0.1)' }}>
       {/* Header */}
-      <div style={{ padding:'1.2rem 1.6rem', borderBottom:'1px solid rgba(255,255,255,0.06)', display:'flex', alignItems:'center', justifyContent:'space-between' }}>
-        <span style={{ fontSize:'1.1rem', fontWeight:700, letterSpacing:'0.12em', color:'rgba(185,153,253,0.7)', fontFamily:"'Gotham Pro', sans-serif", textTransform:'uppercase' as const }}>Таблица лидеров</span>
-        <span style={{ fontSize:'1.1rem', color:'rgba(255,255,255,0.2)', fontFamily:"'Gotham Pro', sans-serif" }}>Сезон 3</span>
+      <div style={{ padding:'1.2rem 1.6rem', borderBottom:'1px solid rgba(141,94,244,0.15)', display:'flex', alignItems:'center', justifyContent:'space-between', background:'rgba(141,94,244,0.06)' }}>
+        <span style={{ fontSize:'1.1rem', fontWeight:700, letterSpacing:'0.12em', color:'rgba(185,153,253,0.9)', fontFamily:"'Gotham Pro', sans-serif", textTransform:'uppercase' as const }}>Таблица лидеров</span>
+        <span style={{ fontSize:'1.1rem', color:'rgba(255,255,255,0.3)', fontFamily:"'Gotham Pro', sans-serif" }}>Сезон 3</span>
       </div>
       {/* Players */}
       {players.map(p => (
         <div key={p.rank} style={{
           display:'flex', alignItems:'center', gap:'1.2rem', padding:'1rem 1.6rem',
           borderBottom:'1px solid rgba(255,255,255,0.04)',
-          background: p.rank === 1 ? 'rgba(141,94,244,0.08)' : 'transparent',
+          background: p.rank === 1 ? 'rgba(141,94,244,0.1)' : 'transparent',
         }}>
-          <span style={{ fontSize:'1.1rem', fontWeight:700, color:p.color, width:'1.6rem', fontFamily:"'Gotham Pro', sans-serif" }}>#{p.rank}</span>
-          <div style={{ width:'2.8rem', height:'2.8rem', borderRadius:'50%', background:`linear-gradient(135deg, ${p.color}33, ${p.color}66)`, border:`1px solid ${p.color}44`, flexShrink:0 }} />
+          <span style={{ fontSize:'1.1rem', fontWeight:700, color:p.color, width:'1.6rem', fontFamily:"'Gotham Pro', sans-serif", textShadow:`0 0 10px ${p.color}` }}>{`#${p.rank}`}</span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={`/images/redesign/landing/characters/character (${p.rank}).png`} alt="" draggable={false} style={{ width:'2.8rem', height:'2.8rem', borderRadius:'50%', objectFit:'cover', flexShrink:0, border:`1px solid ${p.color}66`, boxShadow:`0 0 10px ${p.color}44` }} />
           <span style={{ flex:1, fontSize:'1.3rem', fontWeight:700, color:'#fff', fontFamily:"'Gotham Pro', sans-serif", letterSpacing:'0.05em' }}>{p.name}</span>
-          <span style={{ fontSize:'1rem', color:p.color, letterSpacing:'0.1em' }}>{'★'.repeat(p.stars)}</span>
+          <span style={{ fontSize:'1rem', color:p.color, letterSpacing:'0.1em', textShadow:`0 0 8px ${p.color}` }}>{'★'.repeat(p.stars)}</span>
         </div>
       ))}
       {/* Medal bar */}
       <div style={{ padding:'1.2rem 1.6rem', display:'flex', alignItems:'center', gap:'1.2rem' }}>
         {medals.map((m, i) => (
-          <div key={i} style={{ width:'2.8rem', height:'2.8rem', borderRadius:'0.6rem', background:'rgba(141,94,244,0.12)', border:'1px solid rgba(141,94,244,0.25)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'1.4rem', color:'rgba(185,153,253,0.7)' }}>{m}</div>
+          <div key={i} style={{ width:'2.8rem', height:'2.8rem', borderRadius:'0.6rem', background:'rgba(141,94,244,0.12)', border:'1px solid rgba(141,94,244,0.35)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'1.4rem', color:'rgba(185,153,253,0.9)', boxShadow:'0 0 8px rgba(141,94,244,0.2)' }}>{m}</div>
         ))}
       </div>
-      {/* Green bar */}
-      <div style={{ height:'3px', background:'linear-gradient(90deg, transparent, #22c55e, transparent)' }} />
+      {/* Neon bar */}
+      <div style={{ height:'2px', background:'linear-gradient(90deg, transparent, #8D5EF4, #22c55e, transparent)', boxShadow:'0 0 8px rgba(141,94,244,0.6)' }} />
     </div>
   )
 }
 
 function ControlMockup() {
   const items = [
-    { label: 'CLEAR', color: '#22c55e', glow: 'rgba(34,197,94,0.3)', icon: '✓' },
-    { label: 'REPORTED', color: '#ef4444', glow: 'rgba(239,68,68,0.35)', icon: '!' },
-    { label: 'CLEAR', color: '#22c55e', glow: 'rgba(34,197,94,0.3)', icon: '✓' },
+    { label: 'CLEAR', color: '#22c55e', glow: 'rgba(34,197,94,0.3)', icon: '✓', char: 5 },
+    { label: 'REPORTED', color: '#ef4444', glow: 'rgba(239,68,68,0.35)', icon: '!', char: 6 },
+    { label: 'CLEAR', color: '#22c55e', glow: 'rgba(34,197,94,0.3)', icon: '✓', char: 7 },
   ]
   return (
     <div style={{ display:'flex', flexDirection:'column', gap:'0.8rem', padding:'0.4rem' }}>
@@ -241,7 +260,8 @@ function ControlMockup() {
             <div style={{ width:'2rem', height:'2rem', borderRadius:'50%', background:`${item.color}22`, border:`1px solid ${item.color}66`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:'1rem', color:item.color, fontWeight:700 }}>{item.icon}</div>
             <span style={{ fontSize:'1.8rem', fontWeight:900, letterSpacing:'0.15em', color:item.color, fontFamily:"'Gotham Pro', sans-serif" }}>{item.label}</span>
           </div>
-          <div style={{ width:'3rem', height:'3rem', borderRadius:'50%', background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.1)' }} />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={`/images/redesign/landing/characters/character (${item.char}).png`} alt="" draggable={false} style={{ width:'3rem', height:'3rem', borderRadius:'50%', objectFit:'cover', border:`1px solid ${item.color}44`, boxShadow:`0 0 8px ${item.glow}` }} />
         </div>
       ))}
     </div>
@@ -274,9 +294,10 @@ function VerifyMockup() {
   return (
     <div style={{ borderRadius:'1.2rem', overflow:'hidden', background:'rgba(0,0,0,0.3)', border:'1px solid rgba(255,255,255,0.06)', padding:'2rem' }}>
       <div style={{ display:'flex', alignItems:'center', gap:'1.6rem', marginBottom:'1.6rem' }}>
-        <div style={{ width:'5.6rem', height:'5.6rem', borderRadius:'50%', background:'linear-gradient(135deg, rgba(141,94,244,0.3), rgba(185,153,253,0.1))', border:'2px solid rgba(141,94,244,0.5)', flexShrink:0 }} />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/images/redesign/landing/characters/character (4).png" alt="" draggable={false} style={{ width:'5.6rem', height:'5.6rem', borderRadius:'50%', objectFit:'cover', border:'2px solid rgba(141,94,244,0.5)', flexShrink:0, boxShadow:'0 0 16px rgba(141,94,244,0.4)' }} />
         <div>
-          <div style={{ fontSize:'1.5rem', fontWeight:700, color:'#fff', fontFamily:"'Gotham Pro', sans-serif" }}>NICK NAME</div>
+          <div style={{ fontSize:'1.5rem', fontWeight:700, color:'#fff', fontFamily:"'Gotham Pro', sans-serif" }}>暁月  AKATSUKI</div>
           <div style={{ display:'flex', alignItems:'center', gap:'0.6rem', marginTop:'0.4rem' }}>
             <div style={{ width:'1.4rem', height:'1.4rem', borderRadius:'50%', background:'#22c55e', display:'flex', alignItems:'center', justifyContent:'center' }}>
               <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.5 4l2 2 3-3" stroke="#fff" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/></svg>

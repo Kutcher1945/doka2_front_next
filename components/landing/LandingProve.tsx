@@ -4,7 +4,7 @@ export function LandingProve() {
   return (
     <section
       id="prove"
-      style={{ position: 'relative', overflow: 'hidden', minHeight: '100vh', marginBottom: '8rem', width: '100%' }}
+      style={{ position: 'relative', overflow: 'hidden', minHeight: '100vh', width: '100%' }}
     >
       {/* Blurred background video */}
       <video

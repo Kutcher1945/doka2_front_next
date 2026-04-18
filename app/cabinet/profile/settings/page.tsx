@@ -18,7 +18,7 @@ export default async function ProfileSettingsPage() {
     })
     steamId = (res.data as User).steam_id ?? null
   } catch {
-    redirect('/')
+    // API unavailable — render page without steam status
   }
 
   return <SettingsForm steamId={steamId} />
