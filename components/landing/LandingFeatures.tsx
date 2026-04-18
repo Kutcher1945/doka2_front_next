@@ -1,6 +1,7 @@
 'use client'
 
 import { ParticlesCanvas } from './ParticlesCanvas'
+import { ScrollReveal } from './ScrollReveal'
 
 interface LandingFeaturesProps {
   onSignUp: () => void
@@ -24,9 +25,9 @@ export function LandingFeatures({ onSignUp }: LandingFeaturesProps) {
       <ParticlesCanvas count={55} />
 
       {/* Ambient orbs */}
-      <div style={{ position:'absolute', top:'-10rem', left:'-15rem', width:'60rem', height:'60rem', borderRadius:'50%', background:'radial-gradient(circle, rgba(141,94,244,0.07) 0%, transparent 65%)', pointerEvents:'none', zIndex:0 }} />
-      <div style={{ position:'absolute', top:'35%', right:'-20rem', width:'70rem', height:'70rem', borderRadius:'50%', background:'radial-gradient(circle, rgba(56,189,248,0.04) 0%, transparent 65%)', pointerEvents:'none', zIndex:0 }} />
-      <div style={{ position:'absolute', bottom:'5%', left:'-10rem', width:'50rem', height:'50rem', borderRadius:'50%', background:'radial-gradient(circle, rgba(141,94,244,0.05) 0%, transparent 65%)', pointerEvents:'none', zIndex:0 }} />
+      <div className="anim-orb" style={{ position:'absolute', top:'-10rem', left:'-15rem', width:'60rem', height:'60rem', borderRadius:'50%', background:'radial-gradient(circle, rgba(141,94,244,0.07) 0%, transparent 65%)', pointerEvents:'none', zIndex:0 }} />
+      <div className="anim-orb" style={{ position:'absolute', top:'35%', right:'-20rem', width:'70rem', height:'70rem', borderRadius:'50%', background:'radial-gradient(circle, rgba(56,189,248,0.04) 0%, transparent 65%)', pointerEvents:'none', zIndex:0, animationDelay:'4s' }} />
+      <div className="anim-orb" style={{ position:'absolute', bottom:'5%', left:'-10rem', width:'50rem', height:'50rem', borderRadius:'50%', background:'radial-gradient(circle, rgba(141,94,244,0.05) 0%, transparent 65%)', pointerEvents:'none', zIndex:0, animationDelay:'8s' }} />
       {[15,38,62,85].map(t => (
         <div key={t} style={{ position:'absolute', left:0, right:0, top:`${t}%`, height:'1px', background:'linear-gradient(90deg,transparent,rgba(141,94,244,0.06) 20%,rgba(141,94,244,0.06) 80%,transparent)', pointerEvents:'none', zIndex:0 }} />
       ))}
@@ -34,91 +35,70 @@ export function LandingFeatures({ onSignUp }: LandingFeaturesProps) {
       <div style={{ maxWidth:'1200px', margin:'0 auto', width:'100%', padding:'0 2.4rem', boxSizing:'border-box' as const, position:'relative', zIndex:1 }}>
 
         {/* Title */}
-        <div style={{ textAlign:'center', marginBottom:'10rem', position:'relative' }}>
-          <h2 style={{
-            fontSize:'clamp(3.8rem, 5vw, 7rem)', fontWeight:700,
-            fontFamily:"'Colus', 'Gotham Pro', sans-serif",
-            background:'linear-gradient(135deg, #FFFFFF 0%, #B999FD 50%, #8D5EF4 100%)',
-            WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text',
-          }}>С нами ты получишь</h2>
-          <div style={{ position:'absolute', bottom:'-1.6rem', left:'50%', transform:'translateX(-50%)', width:'12rem', height:'0.4rem', borderRadius:'2px', background:'linear-gradient(90deg,transparent,#8D5EF4,transparent)' }} />
-        </div>
+        <ScrollReveal>
+          <div style={{ textAlign:'center', marginBottom:'10rem', position:'relative' }}>
+            <h2 style={{
+              fontSize:'clamp(3.8rem, 5vw, 7rem)', fontWeight:700,
+              fontFamily:"'Colus', 'Gotham Pro', sans-serif",
+              background:'linear-gradient(135deg, #FFFFFF 0%, #B999FD 50%, #8D5EF4 100%)',
+              WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text',
+            }}>С нами ты получишь</h2>
+            <div style={{ position:'absolute', bottom:'-1.6rem', left:'50%', transform:'translateX(-50%)', width:'12rem', height:'0.4rem', borderRadius:'2px', background:'linear-gradient(90deg,transparent,#8D5EF4,transparent)' }} />
+          </div>
+        </ScrollReveal>
 
         {/* Feature rows */}
         <div style={{ display:'flex', flexDirection:'column', gap:'8rem', marginBottom:'10rem' }}>
 
           {/* 1 — Рейтинг */}
-          <FeatureRow
-            flip={false}
-            hero="/images/redesign/landing/ftr-1.png"
-            heroGlow="rgba(56,240,180,0.3)"
-            card={<RatingMockup />}
-            title="Рейтинг"
-            text="Справедливую рейтинговую систему — чтобы игра была честной, наша система подбирает противников, равных вам по скиллу."
-          />
+          <ScrollReveal direction="left">
+            <FeatureRow flip={false} hero="/images/redesign/landing/ftr-1.png" heroGlow="rgba(56,240,180,0.3)" card={<RatingMockup />} title="Рейтинг" text="Справедливую рейтинговую систему — чтобы игра была честной, наша система подбирает противников, равных вам по скиллу." />
+          </ScrollReveal>
 
           {/* 2 — Контроль */}
-          <FeatureRow
-            flip={true}
-            hero="/images/redesign/landing/ftr-2.png"
-            heroGlow="rgba(239,68,68,0.3)"
-            card={<ControlMockup />}
-            title="Контроль"
-            text="Контроль игры — наши беспристрастные ребята из службы поддержки обработают каждую жалобу и дадут объективный бан читерам, бустерам и руинерам."
-          />
+          <ScrollReveal direction="right">
+            <FeatureRow flip={true} hero="/images/redesign/landing/ftr-2.png" heroGlow="rgba(239,68,68,0.3)" card={<ControlMockup />} title="Контроль" text="Контроль игры — наши беспристрастные ребята из службы поддержки обработают каждую жалобу и дадут объективный бан читерам, бустерам и руинерам." />
+          </ScrollReveal>
 
           {/* 3 — Бонусы */}
-          <FeatureRow
-            flip={false}
-            hero="/images/redesign/landing/ftr-3.png"
-            heroGlow="rgba(251,146,60,0.3)"
-            card={<BonusMockup />}
-            title="Бонусы"
-            text="Мы поддерживаем активных пользователей и поощряем их бонусами и подарками. За регистрацию, пополнение баланса, реферальный бонус и многое другое."
-          />
+          <ScrollReveal direction="left">
+            <FeatureRow flip={false} hero="/images/redesign/landing/ftr-3.png" heroGlow="rgba(251,146,60,0.3)" card={<BonusMockup />} title="Бонусы" text="Мы поддерживаем активных пользователей и поощряем их бонусами и подарками. За регистрацию, пополнение баланса, реферальный бонус и многое другое." />
+          </ScrollReveal>
 
           {/* 4 — Верификация */}
-          <FeatureRow
-            flip={true}
-            hero="/images/redesign/landing/ftr-4.png"
-            heroGlow="rgba(141,94,244,0.4)"
-            card={<VerifyMockup />}
-            title="Верификация"
-            text="Каждый пользователь проходит подтверждение личности — это исключает мультиаккаунты и мошенников."
-          />
+          <ScrollReveal direction="right">
+            <FeatureRow flip={true} hero="/images/redesign/landing/ftr-4.png" heroGlow="rgba(141,94,244,0.4)" card={<VerifyMockup />} title="Верификация" text="Каждый пользователь проходит подтверждение личности — это исключает мультиаккаунты и мошенников." />
+          </ScrollReveal>
 
           {/* 5 — Надёжный вывод */}
-          <FeatureRow
-            flip={false}
-            hero="/images/redesign/landing/ftr-5.png"
-            heroGlow="rgba(251,191,36,0.3)"
-            card={<WithdrawMockup />}
-            title="Надёжный вывод"
-            text="Мгновенный вывод средств на карту. Поддерживаем все популярные платёжные системы без скрытых комиссий."
-          />
+          <ScrollReveal direction="left">
+            <FeatureRow flip={false} hero="/images/redesign/landing/ftr-5.png" heroGlow="rgba(251,191,36,0.3)" card={<WithdrawMockup />} title="Надёжный вывод" text="Мгновенный вывод средств на карту. Поддерживаем все популярные платёжные системы без скрытых комиссий." />
+          </ScrollReveal>
 
         </div>
 
         {/* CTA */}
-        <div style={{ textAlign:'center', position:'relative', zIndex:1 }}>
-          <button
-            onClick={onSignUp}
-            style={{
-              padding:'1.4rem 4.8rem', borderRadius:'1.2rem',
-              fontSize:'2.1rem', fontWeight:600,
-              fontFamily:"'Colus', 'Gotham Pro', sans-serif",
-              color:'#fff',
-              background:'linear-gradient(135deg, #8D5EF4 0%, #B999FD 100%)',
-              border:'none', cursor:'pointer',
-              boxShadow:'0 4px 20px rgba(141,94,244,0.4), 0 8px 40px rgba(141,94,244,0.2)',
-              transition:'transform 0.2s, box-shadow 0.2s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.style.boxShadow='0 6px 30px rgba(141,94,244,0.55), 0 12px 50px rgba(141,94,244,0.3)' }}
-            onMouseLeave={e => { e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='0 4px 20px rgba(141,94,244,0.4), 0 8px 40px rgba(141,94,244,0.2)' }}
-          >
-            Создать аккаунт
-          </button>
-        </div>
+        <ScrollReveal>
+          <div style={{ textAlign:'center', position:'relative', zIndex:1 }}>
+            <button
+              onClick={onSignUp}
+              style={{
+                padding:'1.4rem 4.8rem', borderRadius:'1.2rem',
+                fontSize:'2.1rem', fontWeight:600,
+                fontFamily:"'Colus', 'Gotham Pro', sans-serif",
+                color:'#fff',
+                background:'linear-gradient(135deg, #8D5EF4 0%, #B999FD 100%)',
+                border:'none', cursor:'pointer',
+                boxShadow:'0 4px 20px rgba(141,94,244,0.4), 0 8px 40px rgba(141,94,244,0.2)',
+                transition:'transform 0.2s, box-shadow 0.2s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.style.boxShadow='0 6px 30px rgba(141,94,244,0.55), 0 12px 50px rgba(141,94,244,0.3)' }}
+              onMouseLeave={e => { e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='0 4px 20px rgba(141,94,244,0.4), 0 8px 40px rgba(141,94,244,0.2)' }}
+            >
+              Создать аккаунт
+            </button>
+          </div>
+        </ScrollReveal>
       </div>
     </section>
   )

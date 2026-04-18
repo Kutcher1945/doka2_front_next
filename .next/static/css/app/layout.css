@@ -289,9 +289,6 @@
   .max-w-\[42rem\] {
     max-width: 42rem;
   }
-  .max-w-\[56rem\] {
-    max-width: 56rem;
-  }
   .max-w-\[60rem\] {
     max-width: 60rem;
   }
@@ -362,13 +359,6 @@
       --tw-space-y-reverse: 0;
       margin-block-start: calc(calc(var(--spacing) * 4) * var(--tw-space-y-reverse));
       margin-block-end: calc(calc(var(--spacing) * 4) * calc(1 - var(--tw-space-y-reverse)));
-    }
-  }
-  .space-y-6 {
-    :where(& > :not(:last-child)) {
-      --tw-space-y-reverse: 0;
-      margin-block-start: calc(calc(var(--spacing) * 6) * var(--tw-space-y-reverse));
-      margin-block-end: calc(calc(var(--spacing) * 6) * calc(1 - var(--tw-space-y-reverse)));
     }
   }
   .truncate {
@@ -448,9 +438,6 @@
   .bg-\[\#754FE0\] {
     background-color: #754FE0;
   }
-  .bg-\[\#754FE0\]\/10 {
-    background-color: color-mix(in oklab, #754FE0 10%, transparent);
-  }
   .bg-\[\#141415\] {
     background-color: #141415;
   }
@@ -529,17 +516,8 @@
   .py-3 {
     padding-block: calc(var(--spacing) * 3);
   }
-  .py-4 {
-    padding-block: calc(var(--spacing) * 4);
-  }
-  .pt-2 {
-    padding-top: calc(var(--spacing) * 2);
-  }
   .text-center {
     text-align: center;
-  }
-  .text-left {
-    text-align: left;
   }
   .text-\[1\.2rem\] {
     font-size: 1.2rem;
@@ -647,13 +625,6 @@
     &:last-child {
       border-style: var(--tw-border-style);
       border-width: 0px;
-    }
-  }
-  .hover\:border-\[\#754FE0\]\/50 {
-    &:hover {
-      @media (hover: hover) {
-        border-color: color-mix(in oklab, #754FE0 50%, transparent);
-      }
     }
   }
   .hover\:border-white {

@@ -1,5 +1,7 @@
 'use client'
 
+import { ScrollReveal } from './ScrollReveal'
+
 const TESTIMONIALS = [
   {
     char: 1,
@@ -66,24 +68,26 @@ export function LandingTestimonials() {
       <div style={{ maxWidth:'1200px', margin:'0 auto', padding:'0 2.4rem', boxSizing:'border-box' as const, position:'relative', zIndex:2 }}>
 
         {/* Title */}
-        <div style={{ textAlign:'center', marginBottom:'8rem', position:'relative' }}>
-          <div style={{
-            display:'inline-flex', alignItems:'center', gap:'0.8rem',
-            background:'rgba(141,94,244,0.12)', border:'1px solid rgba(141,94,244,0.3)',
-            borderRadius:'10rem', padding:'0.6rem 1.8rem', marginBottom:'2.4rem',
-          }}>
-            <div style={{ width:'0.6rem', height:'0.6rem', borderRadius:'50%', background:'#8D5EF4', boxShadow:'0 0 8px #8D5EF4' }} />
-            <span style={{ fontSize:'1.3rem', fontWeight:600, letterSpacing:'0.12em', textTransform:'uppercase' as const, color:'#B999FD', fontFamily:"'Gotham Pro', sans-serif" }}>Отзывы игроков</span>
+        <ScrollReveal>
+          <div style={{ textAlign:'center', marginBottom:'8rem', position:'relative' }}>
+            <div style={{
+              display:'inline-flex', alignItems:'center', gap:'0.8rem',
+              background:'rgba(141,94,244,0.12)', border:'1px solid rgba(141,94,244,0.3)',
+              borderRadius:'10rem', padding:'0.6rem 1.8rem', marginBottom:'2.4rem',
+            }}>
+              <div className="anim-pulse-glow" style={{ width:'0.6rem', height:'0.6rem', borderRadius:'50%', background:'#8D5EF4', boxShadow:'0 0 8px #8D5EF4' }} />
+              <span style={{ fontSize:'1.3rem', fontWeight:600, letterSpacing:'0.12em', textTransform:'uppercase' as const, color:'#B999FD', fontFamily:"'Gotham Pro', sans-serif" }}>Отзывы игроков</span>
+            </div>
+            <h2 style={{
+              fontSize:'clamp(3.8rem, 5vw, 7rem)', fontWeight:700,
+              fontFamily:"'Colus', 'Gotham Pro', sans-serif",
+              background:'linear-gradient(135deg, #FFFFFF 0%, #B999FD 50%, #8D5EF4 100%)',
+              WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text',
+              display:'block',
+            }}>Что говорят игроки</h2>
+            <div style={{ position:'absolute', bottom:'-1.6rem', left:'50%', transform:'translateX(-50%)', width:'12rem', height:'0.4rem', borderRadius:'2px', background:'linear-gradient(90deg,transparent,#8D5EF4,transparent)' }} />
           </div>
-          <h2 style={{
-            fontSize:'clamp(3.8rem, 5vw, 7rem)', fontWeight:700,
-            fontFamily:"'Colus', 'Gotham Pro', sans-serif",
-            background:'linear-gradient(135deg, #FFFFFF 0%, #B999FD 50%, #8D5EF4 100%)',
-            WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text',
-            display:'block',
-          }}>Что говорят игроки</h2>
-          <div style={{ position:'absolute', bottom:'-1.6rem', left:'50%', transform:'translateX(-50%)', width:'12rem', height:'0.4rem', borderRadius:'2px', background:'linear-gradient(90deg,transparent,#8D5EF4,transparent)' }} />
-        </div>
+        </ScrollReveal>
 
         {/* Grid */}
         <div style={{
@@ -92,7 +96,9 @@ export function LandingTestimonials() {
           gap:'2.4rem',
         }}>
           {TESTIMONIALS.map((t, i) => (
-            <TestimonialCard key={i} {...t} />
+            <ScrollReveal key={i} delay={i * 80} direction="up">
+              <TestimonialCard {...t} />
+            </ScrollReveal>
           ))}
         </div>
       </div>
@@ -120,7 +126,7 @@ function TestimonialCard({ char, name, rank, text, stars }: typeof TESTIMONIALS[
         <div style={{ display: 'flex', flexDirection: 'column' as const, alignItems: 'center', padding: '3.2rem 2.4rem 0' }}>
           {/* Glow behind circle */}
           <div style={{ position: 'relative' as const }}>
-            <div style={{
+            <div className="anim-pulse-glow" style={{
               position: 'absolute' as const, inset: '-10px',
               borderRadius: '50%',
               background: 'radial-gradient(circle, rgba(141,94,244,0.55) 0%, transparent 70%)',
