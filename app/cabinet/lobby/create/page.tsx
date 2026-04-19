@@ -181,10 +181,10 @@ export default function CreateLobbyPage() {
               onFocus={e => e.currentTarget.style.borderColor = 'rgba(34,197,94,0.5)'}
               onBlur={e => e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)'}
             />
-            <span style={{ position: 'absolute', right: '1.4rem', top: '50%', transform: 'translateY(-50%)', fontSize: '1.3rem', color: 'rgba(255,255,255,0.25)', fontFamily: "'Gotham Pro', sans-serif", fontWeight: 700, pointerEvents: 'none' }}>KZT</span>
+            <span style={{ position: 'absolute', right: '1.4rem', top: '50%', transform: 'translateY(-50%)', fontSize: '1.3rem', color: 'rgba(255,255,255,0.25)', fontFamily: "'Gotham Pro', sans-serif", fontWeight: 700, pointerEvents: 'none' }}>очков</span>
           </div>
           <p style={{ marginTop: '0.7rem', fontSize: '1.15rem', color: 'rgba(255,255,255,0.2)', fontFamily: "'Gotham Pro', sans-serif" }}>
-            Минимальная ставка — 50 KZT
+            Минимальная ставка — 50 очков
           </p>
         </Card>
 
@@ -214,7 +214,6 @@ export default function CreateLobbyPage() {
                 width: '4.8rem', height: '2.6rem', borderRadius: '1.3rem', border: 'none', cursor: 'pointer',
                 background: isPrivate ? 'linear-gradient(90deg, #7C3AED, #8D5EF4)' : 'rgba(255,255,255,0.1)',
                 position: 'relative', transition: 'background 0.2s', flexShrink: 0,
-                boxShadow: isPrivate ? '0 0 12px rgba(141,94,244,0.4)' : 'none',
               }}
             >
               <div style={{
@@ -263,7 +262,7 @@ export default function CreateLobbyPage() {
           <div style={{ display: 'flex', gap: '3rem' }}>
             <SummaryItem label="Режим" value={`${selectedMode.icon} ${selectedMode.label}`} />
             <SummaryItem label="Игроков" value={String(slots)} />
-            <SummaryItem label="Ставка" value={bet ? `${Number(bet).toLocaleString('ru-RU')} KZT` : '—'} highlight={!!bet} />
+            <SummaryItem label="Ставка" value={bet ? `${Number(bet).toLocaleString('ru-RU')} очков` : '—'} highlight={!!bet} />
             <SummaryItem label="Доступ" value={isPrivate ? '🔒 Закрытое' : '🌐 Открытое'} />
           </div>
           <div style={{ display: 'flex', gap: '1rem', flexShrink: 0 }}>
@@ -289,7 +288,6 @@ export default function CreateLobbyPage() {
                 background: loading ? 'rgba(141,94,244,0.4)' : 'linear-gradient(135deg, #8D5EF4 0%, #6040D4 100%)',
                 color: '#fff', fontSize: '1.4rem', fontWeight: 700,
                 fontFamily: "'Gotham Pro', sans-serif",
-                boxShadow: loading ? 'none' : '0 4px 20px rgba(141,94,244,0.4)',
                 transition: 'all 0.15s',
                 display: 'flex', alignItems: 'center', gap: '0.8rem',
               }}

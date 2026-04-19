@@ -48,7 +48,7 @@ export default async function CabinetPage() {
   const gamesToReduce = commission?.games_to_reduce ?? 0
   const balanceVal = wallet?.balance ?? 0
   const bonusVal = wallet?.bonus_balance ?? 0
-  const currency = wallet?.currency ?? 'KZT'
+  const currency = 'очков'
   const progressPct = gamesToReduce > 0 ? Math.max(3, 100 - (gamesToReduce / 10) * 100) : 100
 
   const wins = history.filter(h => h.result === 'DOTA_GC_TEAM_GOOD_GUYS').length
@@ -82,10 +82,41 @@ export default async function CabinetPage() {
         steamConnected={!!user.steam_id}
       />
 
+      {/* ── Greeting row ── */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0.4rem 0.2rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.4rem' }}>
+          <div style={{
+            width: '4.2rem', height: '4.2rem', borderRadius: '50%',
+            background: 'linear-gradient(135deg, #8D5EF4, #B999FD)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: '#fff', fontSize: '1.7rem', fontWeight: 700,
+            flexShrink: 0,             fontFamily: "'Gotham Pro', sans-serif",
+          }}>
+            {(user.username || user.email)?.[0]?.toUpperCase() ?? '?'}
+          </div>
+          <div>
+            <div style={{ fontSize: '1rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase' as const, color: 'rgba(185,153,253,0.6)', fontFamily: "'Gotham Pro', sans-serif", marginBottom: '0.3rem' }}>
+              Добро пожаловать
+            </div>
+            <div style={{ fontSize: '2rem', fontWeight: 700, color: '#fff', fontFamily: "'Colus', 'Gotham Pro', sans-serif", lineHeight: 1 }}>
+              {user.username || user.email?.split('@')[0]}
+            </div>
+          </div>
+        </div>
+        {user.dota_rank ? (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', padding: '0.6rem 1.4rem', borderRadius: '0.8rem', background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.18)' }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/><path d="M4 22h16"/></svg>
+            <span style={{ fontSize: '1.2rem', fontWeight: 700, color: '#f59e0b', fontFamily: "'Gotham Pro', sans-serif" }}>
+              {RANK_LABELS[user.dota_rank] ?? 'Herald'}
+            </span>
+          </div>
+        ) : null}
+      </div>
+
       {/* ── Primary stats row ── */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.2rem' }}>
         <StatCard
-          label="Баланс" value={balanceVal.toLocaleString('ru-RU')} sub={currency}
+          label="Очки" value={balanceVal.toLocaleString('ru-RU')} sub={currency}
           color="#22c55e" glow="rgba(34,197,94,0.15)"
           badge={bonusVal > 0 ? `+${bonusVal} бонус` : undefined}
           icon={<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>}
@@ -114,7 +145,7 @@ export default async function CabinetPage() {
         <div style={glassCard}>
           <div style={cardLabel}>Процент побед</div>
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: '1.2rem', marginBottom: '1.2rem' }}>
-            <span style={{ fontSize: '4rem', fontWeight: 900, color: winRate >= 50 ? '#22c55e' : '#ef4444', fontFamily: "'Colus', sans-serif", lineHeight: 1, textShadow: `0 0 30px ${winRate >= 50 ? 'rgba(34,197,94,0.35)' : 'rgba(239,68,68,0.35)'}` }}>
+            <span style={{ fontSize: '4rem', fontWeight: 900, color: winRate >= 50 ? '#22c55e' : '#ef4444', fontFamily: "'Colus', sans-serif", lineHeight: 1,  }}>
               {winRate}%
             </span>
             <span style={{ fontSize: '1.2rem', color: 'rgba(255,255,255,0.3)', fontFamily: "'Gotham Pro', sans-serif", paddingBottom: '0.5rem' }}>
@@ -123,7 +154,7 @@ export default async function CabinetPage() {
           </div>
           {/* Win rate bar */}
           <div style={{ height: '6px', borderRadius: '3px', background: 'rgba(255,255,255,0.06)', overflow: 'hidden', position: 'relative' }}>
-            <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${winRate}%`, background: winRate >= 50 ? 'linear-gradient(90deg, #16a34a, #22c55e)' : 'linear-gradient(90deg, #b91c1c, #ef4444)', borderRadius: '3px', boxShadow: `0 0 8px ${winRate >= 50 ? 'rgba(34,197,94,0.5)' : 'rgba(239,68,68,0.5)'}` }} />
+            <div style={{ position: 'absolute', left: 0, top: 0, height: '100%', width: `${winRate}%`, background: winRate >= 50 ? 'linear-gradient(90deg, #16a34a, #22c55e)' : 'linear-gradient(90deg, #b91c1c, #ef4444)', borderRadius: '3px',  }} />
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.6rem', fontSize: '1rem', color: 'rgba(255,255,255,0.15)', fontFamily: "'Gotham Pro', sans-serif" }}>
             <span>{totalGames} {plural(totalGames, 'игра', 'игры', 'игр')}</span>
@@ -137,7 +168,7 @@ export default async function CabinetPage() {
           {streak > 0 && streakType ? (
             <>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem', marginBottom: '1rem' }}>
-                <span style={{ fontSize: '4rem', fontWeight: 900, lineHeight: 1, color: streakType === 'win' ? '#22c55e' : '#ef4444', fontFamily: "'Colus', sans-serif", textShadow: `0 0 30px ${streakType === 'win' ? 'rgba(34,197,94,0.35)' : 'rgba(239,68,68,0.35)'}` }}>
+                <span style={{ fontSize: '4rem', fontWeight: 900, lineHeight: 1, color: streakType === 'win' ? '#22c55e' : '#ef4444', fontFamily: "'Colus', sans-serif",  }}>
                   {streak}
                 </span>
                 <div>
@@ -149,7 +180,7 @@ export default async function CabinetPage() {
               </div>
               <div style={{ display: 'flex', gap: '0.5rem' }}>
                 {Array.from({ length: Math.min(streak, 8) }).map((_, i) => (
-                  <div key={i} style={{ flex: 1, height: '6px', borderRadius: '3px', background: streakType === 'win' ? 'rgba(34,197,94,0.7)' : 'rgba(239,68,68,0.7)', boxShadow: `0 0 6px ${streakType === 'win' ? 'rgba(34,197,94,0.4)' : 'rgba(239,68,68,0.4)'}` }} />
+                  <div key={i} style={{ flex: 1, height: '6px', borderRadius: '3px', background: streakType === 'win' ? 'rgba(34,197,94,0.7)' : 'rgba(239,68,68,0.7)',  }} />
                 ))}
                 {Array.from({ length: Math.max(0, 8 - streak) }).map((_, i) => (
                   <div key={i} style={{ flex: 1, height: '6px', borderRadius: '3px', background: 'rgba(255,255,255,0.06)' }} />
@@ -166,10 +197,9 @@ export default async function CabinetPage() {
 
         {/* Commission */}
         <div style={{ ...glassCard, position: 'relative', overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', bottom: '-3rem', right: '-3rem', width: '14rem', height: '14rem', borderRadius: '50%', background: 'radial-gradient(ellipse, rgba(141,94,244,0.1) 0%, transparent 70%)', pointerEvents: 'none' }} />
           <div style={cardLabel}>Комиссия</div>
           <div style={{ display: 'flex', alignItems: 'flex-end', gap: '1rem', marginBottom: '1rem' }}>
-            <span style={{ fontSize: '4rem', fontWeight: 900, color: '#8D5EF4', fontFamily: "'Colus', sans-serif", lineHeight: 1, textShadow: '0 0 30px rgba(141,94,244,0.4)' }}>
+            <span style={{ fontSize: '4rem', fontWeight: 900, color: '#8D5EF4', fontFamily: "'Colus', sans-serif", lineHeight: 1,  }}>
               {commissionPct}%
             </span>
             {gamesToReduce > 0 && (
@@ -182,7 +212,7 @@ export default async function CabinetPage() {
               : 'Минимальная комиссия'}
           </div>
           <div style={{ height: '6px', borderRadius: '3px', background: 'rgba(255,255,255,0.06)', overflow: 'hidden' }}>
-            <div style={{ height: '100%', width: `${progressPct}%`, background: 'linear-gradient(90deg, #6B3FD4, #B999FD)', borderRadius: '3px', boxShadow: '0 0 10px rgba(141,94,244,0.5)' }} />
+            <div style={{ height: '100%', width: `${progressPct}%`, background: 'linear-gradient(90deg, #6B3FD4, #B999FD)', borderRadius: '3px',  }} />
           </div>
         </div>
       </div>
@@ -284,10 +314,6 @@ function StatCard({ label, value, sub, icon, color, glow, badge }: {
       display: 'flex', flexDirection: 'column', gap: '0.6rem',
       position: 'relative', overflow: 'hidden',
     }}>
-      {/* Corner glow */}
-      <div style={{ position: 'absolute', top: '-2.5rem', right: '-2.5rem', width: '12rem', height: '12rem', borderRadius: '50%', background: `radial-gradient(ellipse, ${glow} 0%, transparent 70%)`, pointerEvents: 'none' }} />
-      {/* Bottom accent line */}
-      <div style={{ position: 'absolute', bottom: 0, left: '1.5rem', right: '1.5rem', height: '2px', borderRadius: '1px', background: `linear-gradient(90deg, ${color}50, transparent)` }} />
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <span style={{ fontSize: '0.95rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: 'rgba(255,255,255,0.22)', fontFamily: "'Gotham Pro', sans-serif" }}>

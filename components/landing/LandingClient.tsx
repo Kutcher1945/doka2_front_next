@@ -9,6 +9,7 @@ import { LandingSteps } from './LandingSteps'
 import { LandingFooter } from './LandingFooter'
 import { LandingContact } from './LandingContact'
 import { LandingTestimonials } from './LandingTestimonials'
+import { LandingCarousel } from './LandingCarousel'
 import { AuthModals, type ModalType } from './AuthModals'
 import { MusicProvider } from './MusicContext'
 
@@ -55,6 +56,7 @@ export function LandingClient() {
       `}</style>
       <LandingHeader onSignIn={() => setModal('signin')} onSignUp={() => setModal('signup')} />
       <LandingHero />
+      <LandingCarousel onSignUp={() => setModal('signup')} />
       <LandingProve />
       <LandingFeatures onSignUp={() => setModal('signup')} />
       <LandingSteps />

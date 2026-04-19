@@ -131,11 +131,10 @@ export default function SettingsForm({ steamId }: { steamId: string | null }) {
               border: 'none', color: '#fff', fontSize: '1.5rem', fontWeight: 700,
               fontFamily: "'Colus', 'Gotham Pro', sans-serif", letterSpacing: '0.06em',
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem',
-              boxShadow: saving ? 'none' : '0 4px 20px rgba(141,94,244,0.3)',
               transition: 'all 0.15s', position: 'relative', overflow: 'hidden',
             }}
-            onMouseEnter={e => { if (!saving) e.currentTarget.style.boxShadow = '0 6px 28px rgba(141,94,244,0.5)' }}
-            onMouseLeave={e => { if (!saving) e.currentTarget.style.boxShadow = '0 4px 20px rgba(141,94,244,0.3)' }}
+            onMouseEnter={e => { if (!saving) e.currentTarget.style.transform = 'translateY(-1px)' }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)' }}
           >
             {saving ? (
               <>

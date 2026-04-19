@@ -4,6 +4,7 @@ import { Suspense } from 'react'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { CabinetHeader } from '@/components/layout/CabinetHeader'
 import { SessionRefresher } from '@/components/providers/SessionRefresher'
+import { PageTransition } from '@/components/layout/PageTransition'
 import axios from 'axios'
 import type { User, UserWallet } from '@/types'
 
@@ -46,7 +47,7 @@ export default async function CabinetLayout({ children }: { children: React.Reac
           <SessionRefresher />
         </Suspense>
         <main style={{ flex: 1, overflowY: 'auto', background: '#080710' }}>
-          {children}
+          <PageTransition>{children}</PageTransition>
         </main>
       </div>
     </div>

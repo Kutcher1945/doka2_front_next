@@ -17,25 +17,45 @@ export function useLobbySocket(
   const ws = useRef<WebSocket | null>(null)
   const onMessageRef = useRef(onMessage)
   onMessageRef.current = onMessage
+  const retryDelay = useRef(1000)
+  const destroyed = useRef(false)
 
   useEffect(() => {
-    const url = `${WS_BASE}/ws/lobby/${lobbyId}/`
-    ws.current = new WebSocket(url)
+    destroyed.current = false
 
-    ws.current.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data) as LobbySocketMessage
-        onMessageRef.current(data)
-      } catch {
-        console.error('Failed to parse socket message')
+    function connect() {
+      if (destroyed.current) return
+      const url = `${WS_BASE}/ws/lobby/${lobbyId}/`
+      const socket = new WebSocket(url)
+      ws.current = socket
+
+      socket.onopen = () => {
+        retryDelay.current = 1000
+      }
+
+      socket.onmessage = (event) => {
+        try {
+          const data = JSON.parse(event.data) as LobbySocketMessage
+          onMessageRef.current(data)
+        } catch {
+          console.error('Failed to parse socket message')
+        }
+      }
+
+      socket.onclose = () => {
+        if (destroyed.current) return
+        console.error('Lobby WebSocket closed, reconnecting in', retryDelay.current, 'ms')
+        setTimeout(() => {
+          retryDelay.current = Math.min(retryDelay.current * 2, 30000)
+          connect()
+        }, retryDelay.current)
       }
     }
 
-    ws.current.onclose = () => {
-      console.error('Lobby WebSocket closed')
-    }
+    connect()
 
     return () => {
+      destroyed.current = true
       ws.current?.close()
     }
   }, [lobbyId])

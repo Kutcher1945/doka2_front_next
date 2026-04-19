@@ -39,7 +39,7 @@ export default async function WalletPage() {
   const balance = wallet?.balance ?? 0
   const bonus = wallet?.bonus_balance ?? 0
   const blocked = wallet?.blocked_balance ?? 0
-  const currency = wallet?.currency ?? 'KZT'
+  const currency = 'очков'
 
   return (
     <div style={{ padding: '2rem 2.4rem', display: 'flex', flexDirection: 'column', gap: '1.6rem' }}>
@@ -50,7 +50,7 @@ export default async function WalletPage() {
           Кошелёк
         </h1>
         <p style={{ fontSize: '1.3rem', color: 'rgba(255,255,255,0.3)', fontFamily: "'Gotham Pro', sans-serif", margin: '0.4rem 0 0' }}>
-          Управляйте балансом и транзакциями
+          Управляйте очками и транзакциями
         </p>
       </div>
 
@@ -64,7 +64,7 @@ export default async function WalletPage() {
           position: 'relative', overflow: 'hidden',
         }}>
           <div style={{ position: 'absolute', top: '-3rem', right: '-3rem', width: '14rem', height: '14rem', borderRadius: '50%', background: 'radial-gradient(ellipse, rgba(141,94,244,0.15) 0%, transparent 70%)', pointerEvents: 'none' }} />
-          <div style={{ fontSize: '1rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: 'rgba(185,153,253,0.6)', fontFamily: "'Gotham Pro', sans-serif", marginBottom: '1.2rem' }}>Основной баланс</div>
+          <div style={{ fontSize: '1rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: 'rgba(185,153,253,0.6)', fontFamily: "'Gotham Pro', sans-serif", marginBottom: '1.2rem' }}>Основные очки</div>
           <div style={{ fontSize: '4rem', fontWeight: 900, color: '#fff', fontFamily: "'Colus', 'Gotham Pro', sans-serif", lineHeight: 1, marginBottom: '0.4rem' }}>
             {balance.toLocaleString('ru-RU')}
           </div>
@@ -74,7 +74,7 @@ export default async function WalletPage() {
         {/* Bonus balance */}
         <div style={{ background: 'linear-gradient(160deg, #0f0e17 0%, #0c0b14 100%)', border: '1px solid rgba(255,255,255,0.06)', borderRadius: '1.4rem', padding: '2.4rem', position: 'relative', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', top: '-3rem', right: '-3rem', width: '14rem', height: '14rem', borderRadius: '50%', background: 'radial-gradient(ellipse, rgba(34,197,94,0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
-          <div style={{ fontSize: '1rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: 'rgba(255,255,255,0.2)', fontFamily: "'Gotham Pro', sans-serif", marginBottom: '1.2rem' }}>Бонусный баланс</div>
+          <div style={{ fontSize: '1rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: 'rgba(255,255,255,0.2)', fontFamily: "'Gotham Pro', sans-serif", marginBottom: '1.2rem' }}>Бонусные очки</div>
           <div style={{ fontSize: '4rem', fontWeight: 900, color: '#fff', fontFamily: "'Colus', 'Gotham Pro', sans-serif", lineHeight: 1, marginBottom: '0.4rem' }}>
             {bonus.toLocaleString('ru-RU')}
           </div>
@@ -102,7 +102,6 @@ export default async function WalletPage() {
             background: 'linear-gradient(135deg, #8D5EF4 0%, #6B3FD4 100%)',
             color: '#fff', fontSize: '1.6rem', fontWeight: 700,
             fontFamily: "'Gotham Pro', sans-serif",
-            boxShadow: '0 4px 24px rgba(141,94,244,0.3)',
           }}
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">

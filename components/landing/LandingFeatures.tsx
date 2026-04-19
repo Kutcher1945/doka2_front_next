@@ -67,12 +67,12 @@ export function LandingFeatures({ onSignUp }: LandingFeaturesProps) {
 
           {/* 4 — Верификация */}
           <ScrollReveal direction="right">
-            <FeatureRow flip={true} hero="/images/redesign/landing/ftr-4.png" heroGlow="rgba(141,94,244,0.4)" card={<VerifyMockup />} title="Верификация" text="Каждый пользователь проходит подтверждение личности — это исключает мультиаккаунты и мошенников." />
+            <FeatureRow flip={true} hero="/images/redesign/landing/ftr-4.png" heroGlow="rgba(56,189,248,0.45)" card={<VerifyMockup />} title="Верификация" text="Каждый пользователь проходит подтверждение личности — это исключает мультиаккаунты и мошенников." />
           </ScrollReveal>
 
           {/* 5 — Надёжный вывод */}
           <ScrollReveal direction="left">
-            <FeatureRow flip={false} hero="/images/redesign/landing/ftr-5.png" heroGlow="rgba(251,191,36,0.3)" card={<WithdrawMockup />} title="Надёжный вывод" text="Мгновенный вывод средств на карту. Поддерживаем все популярные платёжные системы без скрытых комиссий." />
+            <FeatureRow flip={false} hero="/images/redesign/landing/ftr-5.png" heroGlow="rgba(239,68,68,0.45)" card={<WithdrawMockup />} title="Надёжный вывод" text="Мгновенный вывод средств на карту. Поддерживаем все популярные платёжные системы без скрытых комиссий." />
           </ScrollReveal>
 
         </div>

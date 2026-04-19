@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Link from 'next/link'
 
 interface HeroBannerProps {
@@ -11,44 +11,156 @@ interface HeroBannerProps {
 
 const SLIDES = [
   {
+    bg: '/images/redesign/carousel-background.png',
     decoration: '/images/redesign/carousel-decoration.png',
-    decorationStyle: { height: '115%', bottom: 0 },
-    accent: '#8D5EF4',
+    eyebrow: 'Сезон 3 · Бета-тест',
+    title: 'Поднимай ранг.',
+    titleAccent: 'Зарабатывай.',
+    subtitle: 'Честный матчмейкинг, очки за победы, нулевая терпимость к читерам.',
+    cta: 'Найти лобби',
+    ctaHref: '/cabinet/lobby',
   },
   {
+    bg: '/images/redesign/carousel-background.png',
     decoration: '/images/redesign/carousel-decoration-2.png',
-    decorationStyle: { height: '110%', bottom: 0 },
-    accent: '#5E94F4',
+    eyebrow: 'Бонусная программа',
+    title: 'Приведи друга —',
+    titleAccent: 'получи бонус.',
+    subtitle: '+500 очков на счёт за каждого реферала. Без ограничений по количеству.',
+    cta: 'Узнать подробнее',
+    ctaHref: '/cabinet/profile',
+  },
+  {
+    bg: '/images/redesign/carousel-background.png',
+    decoration: '/images/redesign/carousel-decoration-3.png',
+    eyebrow: 'Турниры · Скоро',
+    title: 'Докажи что',
+    titleAccent: 'ты лучший.',
+    subtitle: 'Еженедельные турниры с призовым фондом. Регистрация открыта для всех.',
+    cta: 'Смотреть турниры',
+    ctaHref: '/cabinet/lobby',
+  },
+  {
+    bg: '/images/redesign/carousel-background.png',
+    decoration: '/images/redesign/carousel-decoration-4.png',
+    eyebrow: 'Новый сезон',
+    title: 'Сезон 4',
+    titleAccent: 'уже близко.',
+    subtitle: 'Готовься к новым испытаниям. Улучшенный матчмейкинг и новые награды.',
+    cta: 'Подготовиться',
+    ctaHref: '/cabinet/lobby',
+  },
+  {
+    bg: '/images/redesign/carousel-background.png',
+    decoration: '/images/redesign/carousel-decoration-5.png',
+    eyebrow: 'Топ игроки · Сезон 3',
+    title: 'Войди в',
+    titleAccent: 'элиту.',
+    subtitle: 'Таблица лидеров обновляется каждую неделю. Докажи, что ты в числе лучших.',
+    cta: 'Смотреть рейтинг',
+    ctaHref: '/cabinet/lobby',
+  },
+  {
+    bg: '/images/redesign/carousel-background.png',
+    decoration: '/images/redesign/carousel-decoration-6.png',
+    eyebrow: 'Ивент · Ограниченное время',
+    title: 'Специальный',
+    titleAccent: 'ивент.',
+    subtitle: 'Выполняй задания, зарабатывай уникальные награды. Только до конца сезона.',
+    cta: 'Участвовать',
+    ctaHref: '/cabinet/lobby',
+  },
+  {
+    bg: '/images/redesign/carousel-background.png',
+    decoration: '/images/redesign/carousel-decoration-7.png',
+    eyebrow: 'Поддержка · 24/7',
+    title: 'Мы всегда',
+    titleAccent: 'на связи.',
+    subtitle: 'Служба поддержки работает круглосуточно. Любой вопрос решим быстро.',
+    cta: 'Написать в поддержку',
+    ctaHref: '/cabinet/support',
   },
 ]
 
+const N = SLIDES.length
+const DRAG_THRESHOLD = 60 // px to commit a swipe
+
 export function HeroBanner({ username, mmr, steamConnected }: HeroBannerProps) {
   const [slide, setSlide] = useState(0)
-  const [fading, setFading] = useState(false)
+  const [dragOffset, setDragOffset] = useState(0)
+  const [isDragging, setIsDragging] = useState(false)
+  const dragStart = useRef<number | null>(null)
+  const autoTimer = useRef<ReturnType<typeof setInterval> | null>(null)
+  const trackRef = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    const t = setInterval(() => {
-      setFading(true)
-      setTimeout(() => {
-        setSlide(s => (s + 1) % SLIDES.length)
-        setFading(false)
-      }, 250)
-    }, 6000)
-    return () => clearInterval(t)
+  const resetAuto = useCallback(() => {
+    if (autoTimer.current) clearInterval(autoTimer.current)
+    autoTimer.current = setInterval(() => setSlide(s => (s + 1) % N), 6000)
   }, [])
 
-  const goTo = (i: number) => {
-    if (i === slide) return
-    setFading(true)
-    setTimeout(() => { setSlide(i); setFading(false) }, 250)
+  useEffect(() => {
+    resetAuto()
+    return () => { if (autoTimer.current) clearInterval(autoTimer.current) }
+  }, [resetAuto])
+
+  const goTo = useCallback((i: number) => {
+    setSlide(((i % N) + N) % N)
+    resetAuto()
+  }, [resetAuto])
+
+  // Mouse drag handlers
+  const onMouseDown = (e: React.MouseEvent) => {
+    dragStart.current = e.clientX
+    setIsDragging(true)
+    setDragOffset(0)
   }
 
-  const current = SLIDES[slide]
+  const onMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging || dragStart.current === null) return
+    setDragOffset(e.clientX - dragStart.current)
+  }
+
+  const onMouseUp = () => {
+    if (!isDragging || dragStart.current === null) return
+    commitDrag()
+  }
+
+  const onMouseLeave = () => {
+    if (isDragging) commitDrag()
+  }
+
+  // Touch handlers
+  const onTouchStart = (e: React.TouchEvent) => {
+    dragStart.current = e.touches[0].clientX
+    setIsDragging(true)
+    setDragOffset(0)
+  }
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (dragStart.current === null) return
+    setDragOffset(e.touches[0].clientX - dragStart.current)
+  }
+
+  const onTouchEnd = () => commitDrag()
+
+  const commitDrag = () => {
+    if (dragStart.current === null) return
+    if (dragOffset < -DRAG_THRESHOLD) goTo(slide + 1)
+    else if (dragOffset > DRAG_THRESHOLD) goTo(slide - 1)
+    setDragOffset(0)
+    setIsDragging(false)
+    dragStart.current = null
+  }
+
+  // Base translateX + live drag offset converted to percent of track width
+  const trackWidth = trackRef.current?.offsetWidth ?? 0
+  const dragPercent = trackWidth > 0 ? (dragOffset / trackWidth) * 100 : 0
+  const basePercent = (slide / N) * 100
+  const translatePercent = basePercent - dragPercent
 
   return (
-    <div style={{
-      display: 'flex', flexDirection: 'column', gap: '1rem',
-    }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+
       {/* Steam warning */}
       {!steamConnected && (
         <div style={{
@@ -79,84 +191,161 @@ export function HeroBanner({ username, mmr, steamConnected }: HeroBannerProps) {
         </div>
       )}
 
-      {/* Banner */}
-      <div style={{
-        position: 'relative', borderRadius: '1.6rem', overflow: 'hidden',
-        height: '22rem', flexShrink: 0,
-        background: 'linear-gradient(135deg, #0d0820 0%, #130d22 50%, #0a0618 100%)',
-        border: '1px solid rgba(141,94,244,0.2)',
-      }}>
-        {/* Background image — always visible */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/images/redesign/carousel-background.png"
-          alt=""
+      {/* Banner wrapper */}
+      <div
+        style={{
+          position: 'relative',
+          height: '32rem',
+          flexShrink: 0,
+          marginTop: '2.4rem',
+          clipPath: 'inset(-7rem 0 0 0 round 1.6rem)',
+          cursor: isDragging ? 'grabbing' : 'grab',
+          userSelect: 'none',
+        }}
+        onMouseDown={onMouseDown}
+        onMouseMove={onMouseMove}
+        onMouseUp={onMouseUp}
+        onMouseLeave={onMouseLeave}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+      >
+
+        {/* Sliding track */}
+        <div
+          ref={trackRef}
           style={{
-            position: 'absolute', inset: 0,
-            width: '100%', height: '100%',
-            objectFit: 'cover', objectPosition: 'center',
-            opacity: 0.75,
+            display: 'flex',
+            width: `${N * 100}%`,
+            height: '100%',
+            transform: `translateX(-${translatePercent}%)`,
+            transition: isDragging ? 'none' : 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)',
+            willChange: 'transform',
           }}
-        />
+        >
+          {SLIDES.map((s, i) => (
+            <div
+              key={i}
+              style={{
+                width: `${100 / N}%`,
+                flexShrink: 0,
+                position: 'relative',
+                height: '100%',
+                background: 'linear-gradient(135deg, #0d0820 0%, #130d22 50%, #0a0618 100%)',
+                boxShadow: 'inset 0 0 0 1px rgba(141,94,244,0.2)',
+              }}
+            >
+              {/* Background image */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={s.bg}
+                alt=""
+                draggable={false}
+                style={{
+                  position: 'absolute', inset: 0,
+                  width: '100%', height: '100%',
+                  objectFit: 'cover', objectPosition: 'center',
+                  opacity: 0.7,
+                  pointerEvents: 'none',
+                }}
+              />
 
-        {/* Left gradient so text is readable */}
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(90deg, rgba(7,4,16,0.88) 0%, rgba(7,4,16,0.6) 40%, rgba(7,4,16,0.15) 65%, transparent 100%)', zIndex: 1 }} />
+              {/* Left text gradient overlay */}
+              <div style={{
+                position: 'absolute', inset: 0,
+                background: 'linear-gradient(90deg, rgba(7,4,16,0.95) 0%, rgba(7,4,16,0.7) 40%, rgba(7,4,16,0.1) 70%, transparent 100%)',
+                pointerEvents: 'none',
+              }} />
 
-        {/* Subtle purple orb behind text */}
-        <div style={{ position: 'absolute', left: '-6rem', top: '-6rem', width: '48rem', height: '40rem', borderRadius: '50%', background: 'radial-gradient(ellipse, rgba(141,94,244,0.1) 0%, transparent 65%)', zIndex: 1, pointerEvents: 'none' }} />
+              {/* Purple ambient orb */}
+              <div style={{
+                position: 'absolute', left: '-6rem', top: '-6rem',
+                width: '48rem', height: '40rem', borderRadius: '50%',
+                background: 'radial-gradient(ellipse, rgba(141,94,244,0.1) 0%, transparent 65%)',
+                pointerEvents: 'none',
+              }} />
 
-        {/* Decoration character — fades between slides */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={current.decoration}
-          alt=""
-          style={{
-            position: 'absolute', right: 0, zIndex: 2,
-            ...current.decorationStyle,
-            objectFit: 'contain', pointerEvents: 'none',
-            opacity: fading ? 0 : 1,
-            transition: 'opacity 0.25s ease',
-            filter: 'drop-shadow(-12px 0 32px rgba(141,94,244,0.2))',
-          }}
-        />
+              {/* Character */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={s.decoration}
+                alt=""
+                draggable={false}
+                style={{
+                  position: 'absolute',
+                  right: '2rem',
+                  bottom: 0,
+                  height: '125%',
+                  objectFit: 'contain',
+                  pointerEvents: 'none',
+                  userSelect: 'none',
+                }}
+              />
 
-        {/* Text content */}
-        <div style={{ position: 'relative', zIndex: 3, padding: '3.4rem 4rem', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <div style={{
-            fontSize: '1.1rem', fontWeight: 700, letterSpacing: '0.18em',
-            textTransform: 'uppercase' as const, color: 'rgba(185,153,253,0.7)',
-            fontFamily: "'Gotham Pro', sans-serif", marginBottom: '1rem',
-          }}>
-            Добро пожаловать
-          </div>
-          <h1 style={{
-            fontSize: 'clamp(2.8rem, 3.5vw, 4.8rem)', fontWeight: 700,
-            fontFamily: "'Colus', 'Gotham Pro', sans-serif",
-            color: '#fff', margin: '0 0 0.8rem', lineHeight: 1.1,
-            textShadow: '0 2px 30px rgba(0,0,0,0.7)',
-          }}>
-            {username}
-          </h1>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
-            <span style={{ fontSize: '1.3rem', color: 'rgba(255,255,255,0.4)', fontFamily: "'Gotham Pro', sans-serif" }}>
-              Сезон 3 · Бета-тест
-            </span>
-            {mmr ? (
-              <>
-                <span style={{ width: '3px', height: '3px', borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'inline-block' }} />
-                <span style={{ fontSize: '1.3rem', color: 'rgba(185,153,253,0.8)', fontFamily: "'Gotham Pro', sans-serif", fontWeight: 600 }}>
-                  {mmr} MMR
-                </span>
-              </>
-            ) : null}
-          </div>
+              {/* Text content */}
+              <div style={{
+                position: 'relative', zIndex: 2,
+                height: '100%',
+                display: 'flex', alignItems: 'center',
+                padding: '3rem 4rem',
+              }}>
+                <div style={{ maxWidth: '52rem' }}>
+                  {/* Eyebrow */}
+                  <div style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '0.6rem',
+                    background: 'rgba(141,94,244,0.12)', border: '1px solid rgba(141,94,244,0.3)',
+                    borderRadius: '10rem', padding: '0.4rem 1.2rem', marginBottom: '1.6rem',
+                    width: 'fit-content',
+                  }}>
+                    <div style={{ width: '0.45rem', height: '0.45rem', borderRadius: '50%', background: '#8D5EF4' }} />
+                    <span style={{ fontSize: '1.05rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase' as const, color: '#B999FD', fontFamily: "'Gotham Pro', sans-serif" }}>
+                      {s.eyebrow}
+                    </span>
+                  </div>
+
+                  {/* Headline */}
+                  <div style={{ fontSize: 'clamp(2.4rem, 3vw, 4rem)', fontWeight: 700, fontFamily: "'Colus', 'Gotham Pro', sans-serif", color: '#fff', lineHeight: 1.1 }}>
+                    {s.title}
+                  </div>
+                  <div style={{
+                    fontSize: 'clamp(2.4rem, 3vw, 4rem)', fontWeight: 700,
+                    fontFamily: "'Colus', 'Gotham Pro', sans-serif",
+                    background: 'linear-gradient(135deg, #B999FD 0%, #8D5EF4 100%)',
+                    WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
+                    lineHeight: 1.1, marginBottom: '1.2rem',
+                  }}>
+                    {s.titleAccent}
+                  </div>
+                  <p style={{ fontSize: '1.3rem', color: 'rgba(255,255,255,0.45)', fontFamily: "'Gotham Pro', sans-serif", lineHeight: 1.5, margin: '0 0 2rem' }}>
+                    {s.subtitle}
+                  </p>
+                  <a
+                    href={s.ctaHref}
+                    onClick={e => isDragging && Math.abs(dragOffset) > 5 && e.preventDefault()}
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: '0.7rem',
+                      padding: '0.9rem 2.4rem', borderRadius: '0.9rem',
+                      background: 'linear-gradient(135deg, #8D5EF4 0%, #B999FD 100%)',
+                      color: '#fff', fontSize: '1.3rem', fontWeight: 700,
+                      fontFamily: "'Gotham Pro', sans-serif", textDecoration: 'none',
+                      letterSpacing: '0.05em',
+                    }}
+                  >
+                    {s.cta}
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
 
-        {/* Slide dots */}
+        {/* Dots */}
         <div style={{
           position: 'absolute', bottom: '1.8rem', left: '50%',
           transform: 'translateX(-50%)',
-          display: 'flex', alignItems: 'center', gap: '0.6rem', zIndex: 4,
+          display: 'flex', alignItems: 'center', gap: '0.6rem',
+          zIndex: 10,
         }}>
           {SLIDES.map((_, i) => (
             <button
@@ -168,11 +357,12 @@ export function HeroBanner({ username, mmr, steamConnected }: HeroBannerProps) {
                 borderRadius: '0.4rem',
                 background: i === slide ? '#C9AAFF' : 'rgba(255,255,255,0.25)',
                 border: 'none', cursor: 'pointer', padding: 0,
-                transition: 'all 0.3s ease',
+                transition: 'all 0.35s ease',
               }}
             />
           ))}
         </div>
+
       </div>
     </div>
   )

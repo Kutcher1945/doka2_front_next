@@ -15,13 +15,12 @@ export function ActionButtons() {
           background: 'linear-gradient(135deg, #8D5EF4 0%, #6040D4 100%)',
           color: '#fff', fontSize: '1.7rem', fontWeight: 700,
           fontFamily: "'Colus', 'Gotham Pro', sans-serif",
-          boxShadow: '0 4px 32px rgba(141,94,244,0.4), inset 0 1px 0 rgba(255,255,255,0.15)',
           position: 'relative', overflow: 'hidden',
           transition: 'transform 0.15s, box-shadow 0.15s',
           letterSpacing: '0.06em',
         }}
-        onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 8px 40px rgba(141,94,244,0.55), inset 0 1px 0 rgba(255,255,255,0.15)' }}
-        onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 32px rgba(141,94,244,0.4), inset 0 1px 0 rgba(255,255,255,0.15)' }}
+        onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)' }}
+        onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)' }}
       >
         {/* shimmer */}
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.07) 50%, transparent 70%)', pointerEvents: 'none' }} />

@@ -137,7 +137,7 @@ export default async function ProfilePage() {
         <div style={{ position: 'absolute', left: '-6rem', top: '-6rem', width: '40rem', height: '40rem', borderRadius: '50%', background: 'radial-gradient(ellipse, rgba(141,94,244,0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
         <div style={{ position: 'absolute', right: '-4rem', bottom: '-4rem', width: '30rem', height: '30rem', borderRadius: '50%', background: `radial-gradient(ellipse, ${rankColor}0d 0%, transparent 70%)`, pointerEvents: 'none' }} />
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <div style={{ width: '10rem', height: '10rem', borderRadius: '50%', background: 'linear-gradient(135deg, #8D5EF4, #B999FD)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '4rem', fontWeight: 700, color: '#fff', fontFamily: "'Colus', 'Gotham Pro', sans-serif", boxShadow: '0 0 40px rgba(141,94,244,0.45)' }}>
+          <div style={{ width: '10rem', height: '10rem', borderRadius: '50%', background: 'linear-gradient(135deg, #8D5EF4, #B999FD)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '4rem', fontWeight: 700, color: '#fff', fontFamily: "'Colus', 'Gotham Pro', sans-serif",  }}>
             {initials}
           </div>
           <div style={{ position: 'absolute', bottom: '0.4rem', right: '0.4rem', width: '1.8rem', height: '1.8rem', borderRadius: '50%', background: user.online_status === 'online' ? '#22c55e' : '#6b7280', border: '3px solid #0c0b14' }} />
@@ -170,9 +170,9 @@ export default async function ProfilePage() {
         </div>
         {wallet && wallet.balance != null && (
           <div style={{ position: 'relative', zIndex: 1, textAlign: 'right' }}>
-            <div style={{ fontSize: '1rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: 'rgba(255,255,255,0.25)', marginBottom: '0.6rem' }}>Баланс</div>
+            <div style={{ fontSize: '1rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase' as const, color: 'rgba(255,255,255,0.25)', marginBottom: '0.6rem' }}>Очки</div>
             <div style={{ fontSize: '3.2rem', fontWeight: 900, color: '#fff', fontFamily: "'Colus', 'Gotham Pro', sans-serif", lineHeight: 1 }}>{Number(wallet.balance).toLocaleString('ru')}</div>
-            <div style={{ fontSize: '1.3rem', color: 'rgba(255,255,255,0.3)', marginTop: '0.4rem' }}>{wallet.currency}</div>
+            <div style={{ fontSize: '1.3rem', color: 'rgba(255,255,255,0.3)', marginTop: '0.4rem' }}>очков</div>
             {wallet.bonus_balance != null && Number(wallet.bonus_balance) > 0 && (
               <div style={{ marginTop: '0.8rem', fontSize: '1.2rem', color: '#f59e0b', fontWeight: 600 }}>+ {Number(wallet.bonus_balance).toLocaleString('ru')} бонусных</div>
             )}

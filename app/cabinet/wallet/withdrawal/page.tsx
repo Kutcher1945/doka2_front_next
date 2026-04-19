@@ -154,7 +154,6 @@ export default function WithdrawalPage() {
                     background: active ? 'linear-gradient(135deg, rgba(141,94,244,0.18) 0%, rgba(96,64,212,0.12) 100%)' : 'rgba(255,255,255,0.03)',
                     border: active ? '1.5px solid rgba(141,94,244,0.6)' : '1.5px solid rgba(255,255,255,0.07)',
                     transition: 'all 0.18s', textAlign: 'left',
-                    boxShadow: active ? '0 0 20px rgba(141,94,244,0.12)' : 'none',
                   }}
                   onMouseEnter={e => { if (!active) { e.currentTarget.style.borderColor = 'rgba(141,94,244,0.35)'; e.currentTarget.style.background = 'rgba(141,94,244,0.06)' } }}
                   onMouseLeave={e => { if (!active) { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.07)'; e.currentTarget.style.background = 'rgba(255,255,255,0.03)' } }}
@@ -293,11 +292,10 @@ export default function WithdrawalPage() {
               border: 'none', color: '#fff', fontSize: '1.6rem', fontWeight: 700,
               fontFamily: "'Colus', 'Gotham Pro', sans-serif", letterSpacing: '0.06em',
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem',
-              boxShadow: loading ? 'none' : '0 4px 24px rgba(141,94,244,0.35)',
               transition: 'all 0.15s', position: 'relative', overflow: 'hidden',
             }}
-            onMouseEnter={e => { if (!loading) { e.currentTarget.style.boxShadow = '0 8px 32px rgba(141,94,244,0.55)'; e.currentTarget.style.transform = 'translateY(-1px)' } }}
-            onMouseLeave={e => { e.currentTarget.style.boxShadow = loading ? 'none' : '0 4px 24px rgba(141,94,244,0.35)'; e.currentTarget.style.transform = 'translateY(0)' }}
+            onMouseEnter={e => { if (!loading) e.currentTarget.style.transform = 'translateY(-1px)' }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)' }}
           >
             {!loading && (
               <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.07) 50%, transparent 70%)', pointerEvents: 'none' }} />

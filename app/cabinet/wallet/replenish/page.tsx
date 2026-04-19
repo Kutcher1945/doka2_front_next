@@ -183,7 +183,7 @@ export default function ReplenishPage() {
                     color: amount === String(q) ? '#B999FD' : '#888',
                   }}
                 >
-                  {q} ₽
+                  {q} pts
                 </button>
               ))}
             </div>
@@ -211,7 +211,7 @@ export default function ReplenishPage() {
                 onFocus={(e) => { e.currentTarget.style.borderColor = 'rgba(141,94,244,0.5)' }}
                 onBlur={(e) => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)' }}
               />
-              <span style={{ position: 'absolute', right: '1.6rem', top: '50%', transform: 'translateY(-50%)', fontSize: '1.4rem', color: '#555', fontWeight: 600 }}>₽</span>
+              <span style={{ position: 'absolute', right: '1.6rem', top: '50%', transform: 'translateY(-50%)', fontSize: '1.2rem', color: '#555', fontWeight: 600 }}>pts</span>
             </div>
           </div>
         </div>
@@ -249,15 +249,14 @@ export default function ReplenishPage() {
               border: 'none',
               background: loading ? 'rgba(141,94,244,0.4)' : 'linear-gradient(135deg, #8D5EF4 0%, #6040D4 100%)',
               color: '#fff',
-              boxShadow: loading ? 'none' : '0 4px 20px rgba(141,94,244,0.4)',
               transition: 'all 0.15s',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               gap: '0.8rem',
             }}
-            onMouseEnter={(e) => { if (!loading) e.currentTarget.style.boxShadow = '0 8px 32px rgba(141,94,244,0.6)' }}
-            onMouseLeave={(e) => { if (!loading) e.currentTarget.style.boxShadow = '0 4px 20px rgba(141,94,244,0.4)' }}
+            onMouseEnter={(e) => { if (!loading) e.currentTarget.style.transform = 'translateY(-1px)' }}
+            onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)' }}
           >
             {loading ? (
               <>
