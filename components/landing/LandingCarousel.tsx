@@ -229,7 +229,7 @@ export function LandingCarousel({ onSignUp }: LandingCarouselProps) {
                       pointerEvents: 'none', zIndex: 0,
                     }} />
 
-                    {/* Character — overflows above card, shown via clip-path on outer container */}
+                    {/* Character — same as HeroBanner: just height, no width constraint */}
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={s.decoration}
@@ -237,11 +237,9 @@ export function LandingCarousel({ onSignUp }: LandingCarouselProps) {
                       draggable={false}
                       style={{
                         position: 'absolute',
-                        right: '2rem',
+                        right: 0,
                         bottom: 0,
                         height: '125%',
-                        objectFit: 'contain',
-                        objectPosition: 'bottom right',
                         pointerEvents: 'none',
                         userSelect: 'none',
                         zIndex: 2,
@@ -254,7 +252,7 @@ export function LandingCarousel({ onSignUp }: LandingCarouselProps) {
                       height: '100%',
                       display: 'flex', alignItems: 'center',
                       padding: '2.4rem 3rem',
-                      paddingRight: '42%',
+                      paddingRight: '52%',
                     }}>
                       <div>
                         <div style={{
@@ -280,7 +278,7 @@ export function LandingCarousel({ onSignUp }: LandingCarouselProps) {
                         }}>
                           {s.titleAccent}
                         </div>
-                        <p style={{ fontSize: '1.35rem', color: 'rgba(255,255,255,0.45)', fontFamily: "'Gotham Pro', sans-serif", lineHeight: 1.5, margin: '0 0 2.4rem', maxWidth: '36rem' }}>
+                        <p style={{ fontSize: '1.35rem', color: 'rgba(255,255,255,0.75)', fontFamily: "'Gotham Pro', sans-serif", lineHeight: 1.5, margin: '0 0 2.4rem', maxWidth: '36rem', background: 'rgba(7,4,16,0.55)', backdropFilter: 'blur(6px)', borderRadius: '0.8rem', padding: '0.6rem 1rem', display: 'inline-block' }}>
                           {s.subtitle}
                         </p>
                         <button
