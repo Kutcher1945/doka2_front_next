@@ -100,6 +100,16 @@ const SLIDES = [
     cta: 'Вывести средства',
     ctaHref: '/cabinet/wallet/withdrawal',
   },
+  {
+    bg: '/images/redesign/carousel-background.png',
+    decoration: '/images/redesign/carousel-decoration-10.png',
+    eyebrow: 'Реферальная программа',
+    title: 'Зови друзей —',
+    titleAccent: 'расти вместе.',
+    subtitle: 'Приглашай друзей и получай бонусы за каждую их победу. Чем больше команда — тем больше выигрыш.',
+    cta: 'Пригласить друга',
+    ctaHref: '/cabinet/profile',
+  },
 ]
 
 const N = SLIDES.length

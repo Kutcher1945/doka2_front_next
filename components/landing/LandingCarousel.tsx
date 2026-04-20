@@ -67,6 +67,13 @@ const SLIDES = [
     titleAccent: 'мгновенно.',
     subtitle: 'Вывод на карту или Binance за считанные минуты. Без скрытых комиссий.',
   },
+  {
+    decoration: '/images/redesign/carousel-decoration-10.png',
+    eyebrow: 'Реферальная программа',
+    title: 'Зови друзей —',
+    titleAccent: 'расти вместе.',
+    subtitle: 'Приглашай друзей и получай бонусы за каждую их победу. Чем больше команда — тем больше выигрыш.',
+  },
 ]
 
 const N = SLIDES.length
