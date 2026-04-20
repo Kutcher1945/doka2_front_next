@@ -1,4 +1,4 @@
-// File: /home/corettaxkutcher/cybert/doka2_front_next/app/api/auth/[...nextauth]/route.ts
+// File: /home/adilannister/doka2/doka2_front_next/app/api/auth/[...nextauth]/route.ts
 import * as entry from '../../../../../../app/api/auth/[...nextauth]/route.js'
 import type { NextRequest } from 'next/server.js'
 

@@ -59,7 +59,7 @@ export const lobbyApi = {
 // Wallet / Payments
 export const walletApi = {
   get: () => api.get('/monetix/wallet/'),
-  replenish: (params: { payment_amount: number; payment_method: string; binance_id?: string }) =>
+  replenish: (params: { payment_amount: number; payment_method: string; binance_id?: string; customer_id?: string | number }) =>
     api.get('/monetix/payments_handler/', { params }),
 }
 

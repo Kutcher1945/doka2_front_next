@@ -1,4 +1,4 @@
-// File: /home/corettaxkutcher/cybert/doka2_front_next/app/layout.tsx
+// File: /home/adilannister/doka2/doka2_front_next/app/layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
