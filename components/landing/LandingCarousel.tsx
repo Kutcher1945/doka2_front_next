@@ -53,6 +53,20 @@ const SLIDES = [
     titleAccent: 'на связи.',
     subtitle: 'Служба поддержки работает круглосуточно. Любой вопрос решим быстро.',
   },
+  {
+    decoration: '/images/redesign/carousel-decoration-8.png',
+    eyebrow: 'Безопасность · Верификация',
+    title: 'Играй честно,',
+    titleAccent: 'побеждай чисто.',
+    subtitle: 'Верификация аккаунта защищает тебя от мошенников и обеспечивает честную игру.',
+  },
+  {
+    decoration: '/images/redesign/carousel-decoration-9.png',
+    eyebrow: 'Вывод средств · Быстро',
+    title: 'Выводи выигрыш',
+    titleAccent: 'мгновенно.',
+    subtitle: 'Вывод на карту или Binance за считанные минуты. Без скрытых комиссий.',
+  },
 ]
 
 const N = SLIDES.length

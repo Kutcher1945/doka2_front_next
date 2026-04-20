@@ -80,6 +80,26 @@ const SLIDES = [
     cta: 'Написать в поддержку',
     ctaHref: '/cabinet/support',
   },
+  {
+    bg: '/images/redesign/carousel-background.png',
+    decoration: '/images/redesign/carousel-decoration-8.png',
+    eyebrow: 'Безопасность · Верификация',
+    title: 'Играй честно,',
+    titleAccent: 'побеждай чисто.',
+    subtitle: 'Верификация аккаунта защищает тебя от мошенников и обеспечивает честную игру.',
+    cta: 'Верифицировать аккаунт',
+    ctaHref: '/cabinet/profile',
+  },
+  {
+    bg: '/images/redesign/carousel-background.png',
+    decoration: '/images/redesign/carousel-decoration-9.png',
+    eyebrow: 'Вывод средств · Быстро',
+    title: 'Выводи выигрыш',
+    titleAccent: 'мгновенно.',
+    subtitle: 'Вывод на карту или Binance за считанные минуты. Без скрытых комиссий.',
+    cta: 'Вывести средства',
+    ctaHref: '/cabinet/wallet/withdrawal',
+  },
 ]
 
 const N = SLIDES.length

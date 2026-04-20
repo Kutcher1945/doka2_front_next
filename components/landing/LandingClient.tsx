@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useSession } from 'next-auth/react'
 import { LandingHeader } from './LandingHeader'
 import { LandingHero } from './LandingHero'
 import { LandingProve } from './LandingProve'
@@ -15,6 +16,8 @@ import { MusicProvider } from './MusicContext'
 
 export function LandingClient() {
   const [modal, setModal] = useState<ModalType>(null)
+  const { data: session } = useSession()
+  const isLoggedIn = !!session
 
   return (
     <MusicProvider>
@@ -54,7 +57,7 @@ export function LandingClient() {
         .anim-pulse-scale { animation: pulseScale 4s ease-in-out infinite; }
         .anim-orb { animation: orb-drift 12s ease-in-out infinite; }
       `}</style>
-      <LandingHeader onSignIn={() => setModal('signin')} onSignUp={() => setModal('signup')} />
+      <LandingHeader onSignIn={() => setModal('signin')} onSignUp={() => setModal('signup')} isLoggedIn={isLoggedIn} />
       <LandingHero />
       <LandingCarousel onSignUp={() => setModal('signup')} />
       <LandingProve />

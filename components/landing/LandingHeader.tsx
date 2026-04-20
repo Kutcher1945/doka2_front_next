@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useMusicContext } from './MusicContext'
 
 interface LandingHeaderProps {
   onSignIn: () => void
   onSignUp: () => void
+  isLoggedIn?: boolean
 }
 
 const NAV_ITEMS = [
@@ -14,11 +15,37 @@ const NAV_ITEMS = [
   { id: 'steps', label: 'Как начать' },
 ]
 
-export function LandingHeader({ onSignIn, onSignUp }: LandingHeaderProps) {
+export function LandingHeader({ onSignIn, onSignUp, isLoggedIn = false }: LandingHeaderProps) {
   const [mobileOpen, setMobileOpen] = useState(false)
   const music = useMusicContext()
   const playing = music?.isPlaying ?? false
   const toggleMusic = music?.toggle ?? (() => {})
+  const barsRef = useRef<(HTMLSpanElement | null)[]>([])
+  const rafRef = useRef<number | null>(null)
+
+  useEffect(() => {
+    const analyser = music?.analyserRef.current
+    if (!playing || !analyser) return
+
+    const data = new Uint8Array(analyser.frequencyBinCount)
+    // Sample 4 frequency bands: sub-bass, bass, mid, high
+    const bins = [2, 5, 12, 22]
+
+    function tick() {
+      analyser!.getByteFrequencyData(data)
+      bins.forEach((bin, i) => {
+        const bar = barsRef.current[i]
+        if (!bar) return
+        const norm = data[bin] / 255
+        const height = 3 + norm * 13
+        bar.style.height = `${height}px`
+      })
+      rafRef.current = requestAnimationFrame(tick)
+    }
+
+    rafRef.current = requestAnimationFrame(tick)
+    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current) }
+  }, [playing, music?.analyserRef])
 
   function scrollTo(id: string) {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -92,60 +119,93 @@ export function LandingHeader({ onSignIn, onSignUp }: LandingHeaderProps) {
 
             {/* Desktop auth + music buttons */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }} className="landing-nav-desktop">
-              <button
-                onClick={onSignIn}
-                style={{
-                  padding: '1rem 2.8rem',
-                  borderRadius: '1.2rem',
-                  fontSize: '1.6rem',
-                  fontWeight: 600,
-                  fontFamily: "'Colus', 'Gotham Pro', sans-serif",
-                  color: '#fff',
-                  background: 'transparent',
-                  border: '2px solid rgba(141,94,244,0.6)',
-                  cursor: 'pointer',
-                  transition: 'all 0.25s',
-                  boxShadow: '0 0 20px rgba(141,94,244,0.15)',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'rgba(141,94,244,0.12)'
-                  e.currentTarget.style.borderColor = 'rgba(141,94,244,0.9)'
-                  e.currentTarget.style.boxShadow = '0 0 28px rgba(141,94,244,0.35)'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'transparent'
-                  e.currentTarget.style.borderColor = 'rgba(141,94,244,0.6)'
-                  e.currentTarget.style.boxShadow = '0 0 20px rgba(141,94,244,0.15)'
-                }}
-              >
-                Вход
-              </button>
-              <button
-                onClick={onSignUp}
-                style={{
-                  padding: '1rem 2.8rem',
-                  borderRadius: '1.2rem',
-                  fontSize: '1.6rem',
-                  fontWeight: 600,
-                  fontFamily: "'Colus', 'Gotham Pro', sans-serif",
-                  color: '#fff',
-                  background: 'linear-gradient(135deg, #8D5EF4 0%, #B999FD 100%)',
-                  border: '2px solid transparent',
-                  cursor: 'pointer',
-                  boxShadow: '0 4px 20px rgba(141,94,244,0.4)',
-                  transition: 'transform 0.2s, box-shadow 0.2s',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'translateY(-2px)'
-                  e.currentTarget.style.boxShadow = '0 6px 28px rgba(141,94,244,0.55)'
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'translateY(0)'
-                  e.currentTarget.style.boxShadow = '0 4px 20px rgba(141,94,244,0.4)'
-                }}
-              >
-                Регистрация
-              </button>
+              {isLoggedIn ? (
+                <a
+                  href="/cabinet"
+                  style={{
+                    padding: '1rem 2.8rem',
+                    borderRadius: '1.2rem',
+                    fontSize: '1.6rem',
+                    fontWeight: 600,
+                    fontFamily: "'Colus', 'Gotham Pro', sans-serif",
+                    color: '#fff',
+                    background: 'linear-gradient(135deg, #8D5EF4 0%, #B999FD 100%)',
+                    border: '2px solid transparent',
+                    textDecoration: 'none',
+                    boxShadow: '0 4px 20px rgba(141,94,244,0.4)',
+                    transition: 'transform 0.2s, box-shadow 0.2s',
+                    display: 'inline-flex', alignItems: 'center', gap: '0.6rem',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-2px)'
+                    e.currentTarget.style.boxShadow = '0 6px 28px rgba(141,94,244,0.55)'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)'
+                    e.currentTarget.style.boxShadow = '0 4px 20px rgba(141,94,244,0.4)'
+                  }}
+                >
+                  Перейти в кабинет
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </a>
+              ) : (
+                <>
+                  <button
+                    onClick={onSignIn}
+                    style={{
+                      padding: '1rem 2.8rem',
+                      borderRadius: '1.2rem',
+                      fontSize: '1.6rem',
+                      fontWeight: 600,
+                      fontFamily: "'Colus', 'Gotham Pro', sans-serif",
+                      color: '#fff',
+                      background: 'transparent',
+                      border: '2px solid rgba(141,94,244,0.6)',
+                      cursor: 'pointer',
+                      transition: 'all 0.25s',
+                      boxShadow: '0 0 20px rgba(141,94,244,0.15)',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'rgba(141,94,244,0.12)'
+                      e.currentTarget.style.borderColor = 'rgba(141,94,244,0.9)'
+                      e.currentTarget.style.boxShadow = '0 0 28px rgba(141,94,244,0.35)'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'transparent'
+                      e.currentTarget.style.borderColor = 'rgba(141,94,244,0.6)'
+                      e.currentTarget.style.boxShadow = '0 0 20px rgba(141,94,244,0.15)'
+                    }}
+                  >
+                    Вход
+                  </button>
+                  <button
+                    onClick={onSignUp}
+                    style={{
+                      padding: '1rem 2.8rem',
+                      borderRadius: '1.2rem',
+                      fontSize: '1.6rem',
+                      fontWeight: 600,
+                      fontFamily: "'Colus', 'Gotham Pro', sans-serif",
+                      color: '#fff',
+                      background: 'linear-gradient(135deg, #8D5EF4 0%, #B999FD 100%)',
+                      border: '2px solid transparent',
+                      cursor: 'pointer',
+                      boxShadow: '0 4px 20px rgba(141,94,244,0.4)',
+                      transition: 'transform 0.2s, box-shadow 0.2s',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-2px)'
+                      e.currentTarget.style.boxShadow = '0 6px 28px rgba(141,94,244,0.55)'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)'
+                      e.currentTarget.style.boxShadow = '0 4px 20px rgba(141,94,244,0.4)'
+                    }}
+                  >
+                    Регистрация
+                  </button>
+                </>
+              )}
 
               {/* Music toggle — circular glassy button */}
               <button
@@ -186,12 +246,13 @@ export function LandingHeader({ onSignIn, onSignUp }: LandingHeaderProps) {
               >
                 {playing ? (
                   <span style={{ display: 'flex', alignItems: 'flex-end', gap: '2.5px', height: '16px' }}>
-                    {[1, 2, 3, 4].map(i => (
-                      <span key={i} style={{
+                    {[0, 1, 2, 3].map(i => (
+                      <span key={i} ref={el => { barsRef.current[i] = el }} style={{
                         display: 'block', width: '3px', borderRadius: '2px',
                         background: 'linear-gradient(to top, #8D5EF4, #C9AAFF)',
                         boxShadow: '0 0 4px rgba(185,153,253,0.8)',
-                        animation: `musicBar${i} 0.${4 + i}s ease-in-out infinite alternate`,
+                        height: '4px',
+                        transition: 'height 0.05s ease',
                       }} />
                     ))}
                   </span>
@@ -362,11 +423,7 @@ export function LandingHeader({ onSignIn, onSignUp }: LandingHeaderProps) {
           .landing-nav-desktop { display: none !important; }
           .landing-nav-mobile { display: flex !important; }
         }
-        @keyframes musicBar1 { from { height: 4px } to { height: 14px } }
-        @keyframes musicBar2 { from { height: 8px } to { height: 16px } }
-        @keyframes musicBar3 { from { height: 12px } to { height: 6px } }
-        @keyframes musicBar4 { from { height: 6px } to { height: 13px } }
-        @keyframes musicBtnPulse {
+@keyframes musicBtnPulse {
           0%, 100% { box-shadow: 0 0 20px rgba(141,94,244,0.5), inset 0 0 12px rgba(141,94,244,0.15); }
           50% { box-shadow: 0 0 32px rgba(141,94,244,0.75), inset 0 0 16px rgba(141,94,244,0.25); }
         }

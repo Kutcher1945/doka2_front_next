@@ -17,7 +17,17 @@ interface Particle {
   alpha: number
   alphaDir: number
   color: string
+  nickname: string
 }
+
+const NICKNAMES = [
+  'Miracle-', 'N0tail', 'Puppey', 'KuroKy', 'w33haa',
+  'Sumail', 'Ana', 'Topson', 'JerAx', 'Ceb',
+  'Dendi', 'Fear', 'iceiceice', 'Arteezy', 'EternalEnvy',
+  'Cr1t-', 's4', 'Fly', 'zai', 'MinD_ContRoL',
+  'Ramzes666', 'Solo', 'Resolut1on', 'Daxak', 'Nightfall',
+  'SumaiL', 'MidOne', 'BoBoKa', 'Gh', '33',
+]
 
 const COLORS = [
   'rgba(141,94,244,',
@@ -54,6 +64,7 @@ export function ParticlesCanvas({ count = 60, style }: ParticlesCanvasProps) {
         alpha: Math.random() * 0.5 + 0.1,
         alphaDir: (Math.random() - 0.5) * 0.004,
         color,
+        nickname: NICKNAMES[Math.floor(Math.random() * NICKNAMES.length)],
       }
     }
 
@@ -126,6 +137,16 @@ export function ParticlesCanvas({ count = 60, style }: ParticlesCanvasProps) {
         ctx.arc(p.x, p.y, glowRadius, 0, Math.PI * 2)
         ctx.fillStyle = grd
         ctx.fill()
+
+        // Nickname label
+        const textAlpha = Math.min(0.55, drawAlpha * 0.75)
+        ctx.font = '600 10px "Gotham Pro", sans-serif'
+        ctx.textBaseline = 'middle'
+        ctx.fillStyle = `${p.color}${textAlpha.toFixed(2)})`
+        ctx.shadowColor = `${p.color}0.6)`
+        ctx.shadowBlur = 6
+        ctx.fillText(p.nickname, p.x + drawRadius + 5, p.y)
+        ctx.shadowBlur = 0
       }
 
       animId = requestAnimationFrame(draw)
