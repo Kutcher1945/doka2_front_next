@@ -112,12 +112,18 @@ export function LandingCarousel({ onSignUp }: LandingCarouselProps) {
     setDragOffset(0); setIsDragging(false); dragStart.current = null
   }
 
-  // 3 full cards visible; active card is centered
-  const slideWidth = containerWidth > 0 ? (containerWidth - 2 * GAP) / 3 : 0
+  // Responsive: 1 card on mobile, 2 on tablet, 3 on desktop
+  const visibleCount = containerWidth < 640 ? 1 : containerWidth < 1024 ? 2 : 3
+  const sidePadding = containerWidth < 640 ? 16 : 0
+  const slideWidth = containerWidth > 0
+    ? (containerWidth - (visibleCount - 1) * GAP - sidePadding * 2) / visibleCount
+    : 0
   const peekOffset = (containerWidth - slideWidth) / 2
   const translateX = containerWidth > 0
     ? -(slide * (slideWidth + GAP)) + peekOffset + dragOffset
     : 0
+  const cardHeight = containerWidth < 640 ? '24rem' : containerWidth < 1024 ? '30rem' : '36rem'
+  const charHeight = containerWidth < 640 ? '110%' : '125%'
 
   return (
     <section style={{ padding: '9.6rem 0', position: 'relative', overflow: 'hidden' }}>
@@ -170,7 +176,7 @@ export function LandingCarousel({ onSignUp }: LandingCarouselProps) {
             <div style={{
               display: 'flex',
               gap: `${GAP}px`,
-              height: CARD_HEIGHT,
+              height: cardHeight,
               transform: `translateX(${translateX}px)`,
               transition: isDragging ? 'none' : 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)',
               willChange: 'transform',
@@ -187,7 +193,7 @@ export function LandingCarousel({ onSignUp }: LandingCarouselProps) {
                     key={i}
                     style={{
                       width: `${slideWidth}px`,
-                      height: CARD_HEIGHT,
+                      height: cardHeight,
                       flexShrink: 0,
                       position: 'relative',
                       borderRadius: '2.4rem',
@@ -239,7 +245,7 @@ export function LandingCarousel({ onSignUp }: LandingCarouselProps) {
                         position: 'absolute',
                         right: 0,
                         bottom: 0,
-                        height: '125%',
+                        height: charHeight,
                         pointerEvents: 'none',
                         userSelect: 'none',
                         zIndex: 2,
@@ -251,8 +257,8 @@ export function LandingCarousel({ onSignUp }: LandingCarouselProps) {
                       position: 'relative', zIndex: 3,
                       height: '100%',
                       display: 'flex', alignItems: 'center',
-                      padding: '2.4rem 3rem',
-                      paddingRight: '52%',
+                      padding: containerWidth < 640 ? '2rem 2rem' : '2.4rem 3rem',
+                      paddingRight: containerWidth < 640 ? '44%' : '52%',
                     }}>
                       <div>
                         <div style={{
@@ -266,30 +272,31 @@ export function LandingCarousel({ onSignUp }: LandingCarouselProps) {
                             {s.eyebrow}
                           </span>
                         </div>
-                        <div style={{ fontSize: 'clamp(2rem, 2.2vw, 3.2rem)', fontWeight: 700, fontFamily: "'Colus', 'Gotham Pro', sans-serif", color: '#fff', lineHeight: 1.1 }}>
+                        <div style={{ fontSize: 'clamp(2rem, 4vw, 3.2rem)', fontWeight: 700, fontFamily: "'Colus', 'Gotham Pro', sans-serif", color: '#fff', lineHeight: 1.1 }}>
                           {s.title}
                         </div>
                         <div style={{
-                          fontSize: 'clamp(2rem, 2.2vw, 3.2rem)', fontWeight: 700,
+                          fontSize: 'clamp(2rem, 4vw, 3.2rem)', fontWeight: 700,
                           fontFamily: "'Colus', 'Gotham Pro', sans-serif",
                           background: 'linear-gradient(135deg, #B999FD 0%, #8D5EF4 100%)',
                           WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-                          lineHeight: 1.1, marginBottom: '1.4rem',
+                          lineHeight: 1.1, marginBottom: containerWidth < 640 ? '0.8rem' : '1.4rem',
                         }}>
                           {s.titleAccent}
                         </div>
-                        <p style={{ fontSize: '1.35rem', color: 'rgba(255,255,255,0.75)', fontFamily: "'Gotham Pro', sans-serif", lineHeight: 1.5, margin: '0 0 2.4rem', maxWidth: '36rem', background: 'rgba(7,4,16,0.55)', backdropFilter: 'blur(6px)', borderRadius: '0.8rem', padding: '0.6rem 1rem', display: 'inline-block' }}>
+                        <p style={{ fontSize: containerWidth < 640 ? '1.1rem' : '1.35rem', color: 'rgba(255,255,255,0.75)', fontFamily: "'Gotham Pro', sans-serif", lineHeight: 1.5, margin: containerWidth < 640 ? '0 0 1.4rem' : '0 0 2.4rem', maxWidth: '36rem', background: 'rgba(7,4,16,0.55)', backdropFilter: 'blur(6px)', borderRadius: '0.8rem', padding: '0.5rem 0.8rem', display: 'inline-block' }}>
                           {s.subtitle}
                         </p>
                         <button
                           onClick={e => { e.stopPropagation(); onSignUp() }}
                           style={{
-                            display: 'inline-flex', alignItems: 'center', gap: '0.8rem',
-                            padding: '1rem 2.8rem', borderRadius: '1rem',
+                            display: 'inline-flex', alignItems: 'center', gap: '0.6rem',
+                            padding: containerWidth < 640 ? '0.8rem 1.6rem' : '1rem 2.8rem',
+                            borderRadius: '1rem',
                             background: 'linear-gradient(135deg, #8D5EF4 0%, #B999FD 100%)',
-                            color: '#fff', fontSize: '1.35rem', fontWeight: 700,
+                            color: '#fff', fontSize: containerWidth < 640 ? '1.2rem' : '1.35rem', fontWeight: 700,
                             fontFamily: "'Gotham Pro', sans-serif", border: 'none', cursor: 'pointer',
-                            letterSpacing: '0.05em',
+                            letterSpacing: '0.05em', whiteSpace: 'nowrap' as const,
                           }}
                         >
                           Начать играть

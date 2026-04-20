@@ -21,42 +21,47 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   const webAudioCtxRef = useRef<AudioContext | null>(null)
   const sourceCreated = useRef(false)
 
+  function setupAnalyser() {
+    const audio = audioRef.current
+    if (!audio || sourceCreated.current) return
+    sourceCreated.current = true
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const actx = new (window.AudioContext || (window as any).webkitAudioContext)()
+    webAudioCtxRef.current = actx
+    const source = actx.createMediaElementSource(audio)
+
+    const hpf = actx.createBiquadFilter()
+    hpf.type = 'highpass'
+    hpf.frequency.value = 80
+    hpf.Q.value = 0.7
+
+    const compressor = actx.createDynamicsCompressor()
+    compressor.threshold.value = -20
+    compressor.knee.value = 8
+    compressor.ratio.value = 3
+    compressor.attack.value = 0.003
+    compressor.release.value = 0.2
+
+    const gain = actx.createGain()
+    gain.gain.value = 1.6
+
+    const analyser = actx.createAnalyser()
+    analyser.fftSize = 256
+    analyser.smoothingTimeConstant = 0.8
+
+    source.connect(hpf)
+    hpf.connect(compressor)
+    compressor.connect(gain)
+    gain.connect(analyser)
+    analyser.connect(actx.destination)
+    analyserRef.current = analyser
+  }
+
   useEffect(() => {
     const audio = new Audio('/dnb_music_main_page.mp3')
     audio.loop = true
-    audio.volume = 0.35
+    audio.volume = 1.0
     audioRef.current = audio
-
-    function setupAnalyser() {
-      if (sourceCreated.current) return
-      sourceCreated.current = true
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const actx = new (window.AudioContext || (window as any).webkitAudioContext)()
-      webAudioCtxRef.current = actx
-      const source = actx.createMediaElementSource(audio)
-      const analyser = actx.createAnalyser()
-      analyser.fftSize = 256
-      analyser.smoothingTimeConstant = 0.8
-      source.connect(analyser)
-      analyser.connect(actx.destination)
-      analyserRef.current = analyser
-    }
-
-    audio.play().then(() => {
-      setupAnalyser()
-      setIsPlaying(true)
-    }).catch(() => {
-      const startOnInteraction = () => {
-        audio.play().then(() => {
-          setupAnalyser()
-          setIsPlaying(true)
-        }).catch(() => {})
-        document.removeEventListener('click', startOnInteraction)
-        document.removeEventListener('keydown', startOnInteraction)
-      }
-      document.addEventListener('click', startOnInteraction)
-      document.addEventListener('keydown', startOnInteraction)
-    })
 
     return () => {
       audio.pause()
@@ -72,6 +77,7 @@ export function MusicProvider({ children }: { children: ReactNode }) {
       audio.pause()
       setIsPlaying(false)
     } else {
+      setupAnalyser()
       audio.play().then(() => setIsPlaying(true)).catch(() => {})
     }
   }

@@ -147,33 +147,41 @@ export function LandingHeader({ onSignIn, onSignUp }: LandingHeaderProps) {
                 Регистрация
               </button>
 
-              {/* Music toggle — same style as Вход */}
+              {/* Music toggle — circular glassy button */}
               <button
                 onClick={toggleMusic}
-                title={playing ? 'Пауза' : 'Включить музыку'}
+                title={playing ? 'Выключить музыку' : 'Включить музыку'}
+                className={playing ? 'music-btn music-btn--on' : 'music-btn'}
                 style={{
-                  padding: '1rem 2rem',
-                  borderRadius: '1.2rem',
-                  fontSize: '1.6rem',
-                  fontWeight: 600,
-                  fontFamily: "'Colus', 'Gotham Pro', sans-serif",
-                  color: '#fff',
-                  background: playing ? 'rgba(141,94,244,0.12)' : 'transparent',
-                  border: '2px solid rgba(141,94,244,0.6)',
+                  width: '44px',
+                  height: '44px',
+                  borderRadius: '50%',
+                  flexShrink: 0,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  background: playing
+                    ? 'linear-gradient(135deg, rgba(141,94,244,0.3) 0%, rgba(185,153,253,0.15) 100%)'
+                    : 'rgba(255,255,255,0.04)',
+                  border: playing ? '1.5px solid rgba(185,153,253,0.7)' : '1.5px solid rgba(255,255,255,0.12)',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
                   cursor: 'pointer',
-                  transition: 'all 0.25s',
-                  boxShadow: playing ? '0 0 28px rgba(141,94,244,0.35)' : '0 0 20px rgba(141,94,244,0.15)',
-                  display: 'flex', alignItems: 'center', gap: '0.8rem',
+                  transition: 'all 0.3s ease',
+                  boxShadow: playing
+                    ? '0 0 20px rgba(141,94,244,0.5), inset 0 0 12px rgba(141,94,244,0.15)'
+                    : '0 2px 8px rgba(0,0,0,0.3)',
+                  padding: 0,
                 }}
                 onMouseEnter={e => {
-                  e.currentTarget.style.background = 'rgba(141,94,244,0.12)'
-                  e.currentTarget.style.borderColor = 'rgba(141,94,244,0.9)'
-                  e.currentTarget.style.boxShadow = '0 0 28px rgba(141,94,244,0.35)'
+                  e.currentTarget.style.transform = 'scale(1.1)'
+                  e.currentTarget.style.boxShadow = playing
+                    ? '0 0 28px rgba(141,94,244,0.7), inset 0 0 14px rgba(141,94,244,0.2)'
+                    : '0 0 16px rgba(141,94,244,0.3)'
                 }}
                 onMouseLeave={e => {
-                  e.currentTarget.style.background = playing ? 'rgba(141,94,244,0.12)' : 'transparent'
-                  e.currentTarget.style.borderColor = 'rgba(141,94,244,0.6)'
-                  e.currentTarget.style.boxShadow = playing ? '0 0 28px rgba(141,94,244,0.35)' : '0 0 20px rgba(141,94,244,0.15)'
+                  e.currentTarget.style.transform = 'scale(1)'
+                  e.currentTarget.style.boxShadow = playing
+                    ? '0 0 20px rgba(141,94,244,0.5), inset 0 0 12px rgba(141,94,244,0.15)'
+                    : '0 2px 8px rgba(0,0,0,0.3)'
                 }}
               >
                 {playing ? (
@@ -181,18 +189,19 @@ export function LandingHeader({ onSignIn, onSignUp }: LandingHeaderProps) {
                     {[1, 2, 3, 4].map(i => (
                       <span key={i} style={{
                         display: 'block', width: '3px', borderRadius: '2px',
-                        background: '#c9aaff',
-                        boxShadow: '0 0 6px rgba(185,153,253,0.9)',
+                        background: 'linear-gradient(to top, #8D5EF4, #C9AAFF)',
+                        boxShadow: '0 0 4px rgba(185,153,253,0.8)',
                         animation: `musicBar${i} 0.${4 + i}s ease-in-out infinite alternate`,
                       }} />
                     ))}
                   </span>
                 ) : (
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.45)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                    <line x1="23" y1="9" x2="17" y2="15"/>
+                    <line x1="17" y1="9" x2="23" y2="15"/>
                   </svg>
                 )}
-                DnB
               </button>
             </div>
 
@@ -357,6 +366,11 @@ export function LandingHeader({ onSignIn, onSignUp }: LandingHeaderProps) {
         @keyframes musicBar2 { from { height: 8px } to { height: 16px } }
         @keyframes musicBar3 { from { height: 12px } to { height: 6px } }
         @keyframes musicBar4 { from { height: 6px } to { height: 13px } }
+        @keyframes musicBtnPulse {
+          0%, 100% { box-shadow: 0 0 20px rgba(141,94,244,0.5), inset 0 0 12px rgba(141,94,244,0.15); }
+          50% { box-shadow: 0 0 32px rgba(141,94,244,0.75), inset 0 0 16px rgba(141,94,244,0.25); }
+        }
+        .music-btn--on { animation: musicBtnPulse 2.5s ease-in-out infinite; }
       `}</style>
     </>
   )
