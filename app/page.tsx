@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { LandingClient } from '@/components/landing/LandingClient'
 import { siteApi } from '@/lib/api'
 
@@ -15,9 +16,13 @@ export default async function LandingPage() {
 
   if (!isEnabled) {
     return (
-      <main className="min-h-screen bg-black flex flex-col items-center justify-center text-white">
-        <h1 className="text-[2.8rem] font-bold uppercase">Технические работы</h1>
-        <p className="text-[1.6rem] text-[#878787] mt-2">Скоро всё заработает :)</p>
+      <main className="relative w-screen h-screen bg-black">
+        <Image
+          src="/images/redesign/landing/maintenece.png"
+          alt="Технические работы"
+          fill
+          className="object-cover"
+        />
       </main>
     )
   }

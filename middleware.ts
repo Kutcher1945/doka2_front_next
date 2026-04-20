@@ -12,7 +12,7 @@ export default auth((req) => {
     return NextResponse.redirect(new URL('/', req.url))
   }
 
-  if (isAuthPage && isLoggedIn) {
+  if (path === '/recovery' && isLoggedIn) {
     return NextResponse.redirect(new URL('/cabinet', req.url))
   }
 })
