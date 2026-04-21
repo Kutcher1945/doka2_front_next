@@ -74,11 +74,17 @@ const SLIDES = [
     titleAccent: 'расти вместе.',
     subtitle: 'Приглашай друзей и получай бонусы за каждую их победу. Чем больше команда — тем больше выигрыш.',
   },
+  {
+    decoration: '/images/redesign/carousel-decoration-11.png',
+    eyebrow: 'Легенды · Сезон 3',
+    title: 'Стань',
+    titleAccent: 'легендой.',
+    subtitle: 'Покори вершины рейтинга и войди в историю. Только сильнейшие получают легендарный статус.',
+  },
 ]
 
 const N = SLIDES.length
 const DRAG_THRESHOLD = 50
-const CARD_HEIGHT = '36rem'
 const CHAR_OVERFLOW = '14rem'
 const GAP = 20 // px between cards
 

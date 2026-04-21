@@ -1,13 +1,4 @@
 {
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/page": "app/page.js",
-  "/cabinet/lobby/[id]/page": "app/cabinet/lobby/[id]/page.js",
-  "/cabinet/profile/page": "app/cabinet/profile/page.js",
-  "/cabinet/lobby/page": "app/cabinet/lobby/page.js",
-  "/cabinet/profile/settings/page": "app/cabinet/profile/settings/page.js",
-  "/cabinet/wallet/page": "app/cabinet/wallet/page.js",
-  "/cabinet/page": "app/cabinet/page.js",
-  "/cabinet/history/page": "app/cabinet/history/page.js",
-  "/cabinet/friends/page": "app/cabinet/friends/page.js",
-  "/cabinet/support/page": "app/cabinet/support/page.js"
+  "/page": "app/page.js"
 }
