@@ -93,6 +93,15 @@ export default function WithdrawalPage() {
   return (
     <div style={{ minHeight: '100%', background: '#080710', padding: '3.2rem 3.2rem 3.2rem 4rem', display: 'flex', flexDirection: 'column', gap: '2.4rem' }}>
 
+      {/* Coming soon banner */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem', padding: '1.4rem 2rem', borderRadius: '1.2rem', background: 'linear-gradient(135deg, rgba(141,94,244,0.12) 0%, rgba(56,189,248,0.08) 100%)', border: '1px solid rgba(141,94,244,0.3)' }}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(185,153,253,0.9)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <span style={{ fontSize: '1.4rem', fontWeight: 700, color: '#fff', fontFamily: "'Gotham Pro', sans-serif" }}>Вывод средств скоро будет доступен</span>
+        <div style={{ marginLeft: 'auto', flexShrink: 0, padding: '0.3rem 0.9rem', borderRadius: '2rem', background: 'rgba(141,94,244,0.25)', fontSize: '1.1rem', fontWeight: 700, color: 'rgba(185,153,253,0.9)', fontFamily: "'Gotham Pro', sans-serif", letterSpacing: '0.08em', textTransform: 'uppercase' as const }}>Скоро</div>
+      </div>
+
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '1.6rem' }}>
         <button

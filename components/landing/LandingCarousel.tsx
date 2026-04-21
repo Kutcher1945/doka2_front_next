@@ -94,6 +94,33 @@ export function LandingCarousel({ onSignUp }: LandingCarouselProps) {
   const autoTimer = useRef<ReturnType<typeof setInterval> | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const [containerWidth, setContainerWidth] = useState(0)
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([])
+
+  function handleCardMouseMove(e: React.MouseEvent<HTMLDivElement>, i: number) {
+    if (isDragging) return
+    const card = cardRefs.current[i]
+    if (!card) return
+    const rect = card.getBoundingClientRect()
+    const x = (e.clientX - rect.left) / rect.width  - 0.5  // -0.5 to 0.5
+    const y = (e.clientY - rect.top)  / rect.height - 0.5
+    const rotY =  x * 14
+    const rotX = -y * 10
+    card.style.transform = `scale(${i === slide ? 1 : Math.abs(i - slide) === 1 ? 0.93 : 0.86}) perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg)`
+    card.style.transition = 'transform 0.1s ease'
+    // Parallax: shift the inner character image slightly
+    const img = card.querySelector<HTMLImageElement>('img.char-img')
+    if (img) img.style.transform = `translate(${x * 12}px, ${y * 8}px)`
+  }
+
+  function handleCardMouseLeave(i: number) {
+    const card = cardRefs.current[i]
+    if (!card) return
+    const baseScale = i === slide ? 1 : Math.abs(i - slide) === 1 ? 0.93 : 0.86
+    card.style.transform = `scale(${baseScale})`
+    card.style.transition = 'transform 0.5s ease'
+    const img = card.querySelector<HTMLImageElement>('img.char-img')
+    if (img) { img.style.transform = 'translate(0,0)'; img.style.transition = 'transform 0.5s ease' }
+  }
 
   // Measure container width
   useEffect(() => {
@@ -148,6 +175,33 @@ export function LandingCarousel({ onSignUp }: LandingCarouselProps) {
 
   return (
     <section style={{ padding: '9.6rem 0', position: 'relative', overflow: 'hidden' }}>
+      <style>{`
+        .carousel-btn {
+          position: relative;
+          overflow: hidden;
+          transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+        }
+        .carousel-btn::after {
+          content: '';
+          position: absolute;
+          top: 0; left: -100%;
+          width: 60%; height: 100%;
+          background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.22) 50%, transparent 100%);
+          transform: skewX(-20deg);
+          transition: none;
+        }
+        .carousel-btn:hover {
+          transform: translateY(-2px) scale(1.04) !important;
+          box-shadow: 0 8px 32px rgba(141,94,244,0.6), 0 0 0 1px rgba(185,153,253,0.3) !important;
+        }
+        .carousel-btn:hover::after {
+          left: 160%;
+          transition: left 0.45s ease;
+        }
+        .carousel-btn:active {
+          transform: translateY(0px) scale(0.98) !important;
+        }
+      `}</style>
       {/* Ambient orbs */}
       <div style={{ position: 'absolute', top: '10%', left: '-10rem', width: '50rem', height: '50rem', borderRadius: '50%', background: 'radial-gradient(circle, rgba(141,94,244,0.07) 0%, transparent 65%)', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', bottom: '5%', right: '-10rem', width: '50rem', height: '50rem', borderRadius: '50%', background: 'radial-gradient(circle, rgba(141,94,244,0.05) 0%, transparent 65%)', pointerEvents: 'none' }} />
@@ -212,6 +266,9 @@ export function LandingCarousel({ onSignUp }: LandingCarouselProps) {
                 return (
                   <div
                     key={i}
+                    ref={el => { cardRefs.current[i] = el }}
+                    onMouseMove={e => handleCardMouseMove(e, i)}
+                    onMouseLeave={() => handleCardMouseLeave(i)}
                     style={{
                       width: `${slideWidth}px`,
                       height: cardHeight,
@@ -226,6 +283,7 @@ export function LandingCarousel({ onSignUp }: LandingCarouselProps) {
                       boxShadow: isActive
                         ? '0 0 0 1.5px rgba(141,94,244,0.65), 0 0 40px rgba(141,94,244,0.22), 0 16px 60px rgba(0,0,0,0.7)'
                         : '0 0 0 1px rgba(141,94,244,0.18)',
+                      willChange: 'transform',
                     }}
                   >
                     {/* Inner — clips bg to border-radius */}
@@ -262,8 +320,10 @@ export function LandingCarousel({ onSignUp }: LandingCarouselProps) {
                       src={s.decoration}
                       alt=""
                       draggable={false}
+                      className="char-img"
                       style={{
                         position: 'absolute',
+                        transition: 'transform 0.1s ease',
                         right: 0,
                         bottom: 0,
                         height: charHeight,
@@ -310,6 +370,7 @@ export function LandingCarousel({ onSignUp }: LandingCarouselProps) {
                         </p>
                         <button
                           onClick={e => { e.stopPropagation(); onSignUp() }}
+                          className="carousel-btn"
                           style={{
                             display: 'inline-flex', alignItems: 'center', gap: '0.6rem',
                             padding: containerWidth < 640 ? '0.8rem 1.6rem' : '1rem 2.8rem',
@@ -318,6 +379,7 @@ export function LandingCarousel({ onSignUp }: LandingCarouselProps) {
                             color: '#fff', fontSize: containerWidth < 640 ? '1.2rem' : '1.35rem', fontWeight: 700,
                             fontFamily: "'Gotham Pro', sans-serif", border: 'none', cursor: 'pointer',
                             letterSpacing: '0.05em', whiteSpace: 'nowrap' as const,
+                            boxShadow: '0 4px 20px rgba(141,94,244,0.4)',
                           }}
                         >
                           Начать играть

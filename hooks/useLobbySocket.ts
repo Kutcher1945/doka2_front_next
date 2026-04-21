@@ -12,7 +12,8 @@ const WS_BASE =
 
 export function useLobbySocket(
   lobbyId: string | number,
-  onMessage: (data: LobbySocketMessage) => void
+  onMessage: (data: LobbySocketMessage) => void,
+  authToken?: string | null
 ) {
   const ws = useRef<WebSocket | null>(null)
   const onMessageRef = useRef(onMessage)
@@ -21,11 +22,16 @@ export function useLobbySocket(
   const destroyed = useRef(false)
 
   useEffect(() => {
+    // Wait until session is resolved; undefined means still loading
+    if (authToken === undefined) return
+
     destroyed.current = false
 
     function connect() {
       if (destroyed.current) return
-      const url = `${WS_BASE}/ws/lobby/${lobbyId}/`
+      const url = authToken
+        ? `${WS_BASE}/ws/lobby/${lobbyId}/?token=${authToken}`
+        : `${WS_BASE}/ws/lobby/${lobbyId}/`
       const socket = new WebSocket(url)
       ws.current = socket
 
@@ -58,7 +64,7 @@ export function useLobbySocket(
       destroyed.current = true
       ws.current?.close()
     }
-  }, [lobbyId])
+  }, [lobbyId, authToken])
 
   const send = useCallback((data: LobbySocketMessage['data']) => {
     if (ws.current?.readyState === WebSocket.OPEN) {

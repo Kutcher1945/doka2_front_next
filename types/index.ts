@@ -40,6 +40,8 @@ export interface Lobby {
   datetime_create: string
   datetime_start_game: string | null
   datetime_finish_game: string | null
+  vs_bots: boolean
+  dota_lobby_id: number | null
 }
 
 export interface Membership {

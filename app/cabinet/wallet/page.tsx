@@ -44,6 +44,34 @@ export default async function WalletPage() {
   return (
     <div style={{ padding: '2rem 2.4rem', display: 'flex', flexDirection: 'column', gap: '1.6rem' }}>
 
+      {/* Coming soon banner */}
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: '1.2rem',
+        padding: '1.4rem 2rem', borderRadius: '1.2rem',
+        background: 'linear-gradient(135deg, rgba(141,94,244,0.12) 0%, rgba(56,189,248,0.08) 100%)',
+        border: '1px solid rgba(141,94,244,0.3)',
+      }}>
+        <div style={{
+          flexShrink: 0, width: '3.2rem', height: '3.2rem', borderRadius: '50%',
+          background: 'rgba(141,94,244,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(185,153,253,0.9)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+        </div>
+        <div>
+          <div style={{ fontSize: '1.4rem', fontWeight: 700, color: '#fff', fontFamily: "'Gotham Pro', sans-serif" }}>
+            Кошелёк скоро будет доступен
+          </div>
+          <div style={{ fontSize: '1.2rem', color: 'rgba(185,153,253,0.6)', fontFamily: "'Gotham Pro', sans-serif", marginTop: '0.2rem' }}>
+            Пополнение и вывод средств находятся в разработке
+          </div>
+        </div>
+        <div style={{ marginLeft: 'auto', flexShrink: 0, padding: '0.4rem 1rem', borderRadius: '2rem', background: 'rgba(141,94,244,0.25)', fontSize: '1.1rem', fontWeight: 700, color: 'rgba(185,153,253,0.9)', fontFamily: "'Gotham Pro', sans-serif", letterSpacing: '0.08em', textTransform: 'uppercase' as const }}>
+          Скоро
+        </div>
+      </div>
+
       {/* Page header */}
       <div>
         <h1 style={{ fontSize: '2.4rem', fontWeight: 700, color: '#fff', fontFamily: "'Colus', 'Gotham Pro', sans-serif", margin: 0, lineHeight: 1.2 }}>
@@ -94,37 +122,43 @@ export default async function WalletPage() {
 
       {/* Actions */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.4rem' }}>
-        <Link
-          href="/cabinet/wallet/replenish"
-          style={{
+        {/* Replenish — disabled */}
+        <div style={{ position: 'relative' }}>
+          <div style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem',
-            padding: '1.6rem', borderRadius: '1.2rem', textDecoration: 'none',
-            background: 'linear-gradient(135deg, #8D5EF4 0%, #6B3FD4 100%)',
-            color: '#fff', fontSize: '1.6rem', fontWeight: 700,
-            fontFamily: "'Gotham Pro', sans-serif",
-          }}
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-          </svg>
-          Пополнить
-        </Link>
-        <Link
-          href="/cabinet/wallet/withdrawal"
-          style={{
+            padding: '1.6rem', borderRadius: '1.2rem',
+            background: 'linear-gradient(135deg, rgba(141,94,244,0.3) 0%, rgba(107,63,212,0.2) 100%)',
+            color: 'rgba(255,255,255,0.4)', fontSize: '1.6rem', fontWeight: 700,
+            fontFamily: "'Gotham Pro', sans-serif", cursor: 'not-allowed',
+          }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Пополнить
+          </div>
+          <div style={{ position: 'absolute', top: '0.6rem', right: '0.8rem', padding: '0.2rem 0.7rem', borderRadius: '2rem', background: 'rgba(141,94,244,0.25)', fontSize: '1rem', fontWeight: 700, color: 'rgba(185,153,253,0.8)', fontFamily: "'Gotham Pro', sans-serif", letterSpacing: '0.06em' }}>
+            Скоро
+          </div>
+        </div>
+        {/* Withdraw — disabled */}
+        <div style={{ position: 'relative' }}>
+          <div style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem',
-            padding: '1.6rem', borderRadius: '1.2rem', textDecoration: 'none',
-            background: 'rgba(255,255,255,0.04)',
-            border: '1px solid rgba(255,255,255,0.1)',
-            color: 'rgba(255,255,255,0.8)', fontSize: '1.6rem', fontWeight: 700,
-            fontFamily: "'Gotham Pro', sans-serif",
-          }}
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>
-          </svg>
-          Вывести
-        </Link>
+            padding: '1.6rem', borderRadius: '1.2rem',
+            background: 'rgba(255,255,255,0.02)',
+            border: '1px solid rgba(255,255,255,0.05)',
+            color: 'rgba(255,255,255,0.25)', fontSize: '1.6rem', fontWeight: 700,
+            fontFamily: "'Gotham Pro', sans-serif", cursor: 'not-allowed',
+          }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>
+            </svg>
+            Вывести
+          </div>
+          <div style={{ position: 'absolute', top: '0.6rem', right: '0.8rem', padding: '0.2rem 0.7rem', borderRadius: '2rem', background: 'rgba(141,94,244,0.25)', fontSize: '1rem', fontWeight: 700, color: 'rgba(185,153,253,0.8)', fontFamily: "'Gotham Pro', sans-serif", letterSpacing: '0.06em' }}>
+            Скоро
+          </div>
+        </div>
       </div>
 
       {/* Transaction history */}

@@ -68,6 +68,9 @@ export function CabinetHeader({ user, wallet }: CabinetHeaderProps) {
             {balance.toLocaleString('ru-RU')}
           </span>
           <span style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.35)', fontFamily: "'Gotham Pro', sans-serif" }}>{currency}</span>
+          <span style={{ padding: '0.15rem 0.55rem', borderRadius: '2rem', background: 'rgba(141,94,244,0.25)', fontSize: '0.9rem', fontWeight: 700, color: 'rgba(185,153,253,0.8)', fontFamily: "'Gotham Pro', sans-serif", letterSpacing: '0.06em' }}>
+            Скоро
+          </span>
         </Link>
 
         {/* Divider */}

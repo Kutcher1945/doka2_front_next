@@ -28,6 +28,7 @@ export default function CreateLobbyPage() {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [isPrivate, setIsPrivate] = useState(false)
+  const [vsBots, setVsBots] = useState(false)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -50,6 +51,7 @@ export default function CreateLobbyPage() {
         game_mode: gameMode,
         leader: user.id,
         password: isPrivate && password ? password : undefined,
+        vs_bots: vsBots,
       })
       router.push(`/cabinet/lobby/${res.data.id}`)
     } catch (err: unknown) {
@@ -252,6 +254,49 @@ export default function CreateLobbyPage() {
           )}
         </Card>
 
+        {/* ── Vs Bots toggle ── */}
+        <Card>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
+              <div style={{ width: '3.6rem', height: '3.6rem', borderRadius: '0.8rem', background: vsBots ? 'rgba(34,197,94,0.12)' : 'rgba(255,255,255,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'background 0.2s' }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={vsBots ? '#22c55e' : 'rgba(255,255,255,0.3)'} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/>
+                </svg>
+              </div>
+              <div>
+                <div style={{ fontSize: '1.4rem', fontWeight: 700, color: vsBots ? '#22c55e' : 'rgba(255,255,255,0.7)', fontFamily: "'Gotham Pro', sans-serif", transition: 'color 0.2s' }}>
+                  Против ботов
+                </div>
+                <div style={{ fontSize: '1.15rem', color: 'rgba(255,255,255,0.25)', fontFamily: "'Gotham Pro', sans-serif" }}>
+                  Играть одному против ИИ Dota 2 (для тестов)
+                </div>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => setVsBots(v => !v)}
+              style={{
+                width: '4.8rem', height: '2.6rem', borderRadius: '1.3rem', border: 'none', cursor: 'pointer',
+                background: vsBots ? 'linear-gradient(90deg, #16a34a, #22c55e)' : 'rgba(255,255,255,0.1)',
+                position: 'relative', transition: 'background 0.2s', flexShrink: 0,
+              }}
+            >
+              <div style={{
+                position: 'absolute', top: '3px', width: '2rem', height: '2rem', borderRadius: '50%',
+                background: '#fff', transition: 'left 0.2s',
+                left: vsBots ? 'calc(100% - 2.3rem)' : '3px',
+                boxShadow: '0 1px 4px rgba(0,0,0,0.4)',
+              }} />
+            </button>
+          </div>
+          {vsBots && (
+            <div style={{ marginTop: '1.2rem', paddingTop: '1.2rem', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', gap: '0.8rem', fontSize: '1.2rem', color: 'rgba(34,197,94,0.7)', fontFamily: "'Gotham Pro', sans-serif" }}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              Dire будет заполнен ИИ-ботами среднего уровня. Только вы заходите в слот Radiant.
+            </div>
+          )}
+        </Card>
+
         {/* ── Summary & submit ── */}
         <div style={{
           background: 'linear-gradient(135deg, rgba(141,94,244,0.08) 0%, rgba(107,63,212,0.04) 100%)',
@@ -264,6 +309,7 @@ export default function CreateLobbyPage() {
             <SummaryItem label="Игроков" value={String(slots)} />
             <SummaryItem label="Ставка" value={bet ? `${Number(bet).toLocaleString('ru-RU')} очков` : '—'} highlight={!!bet} />
             <SummaryItem label="Доступ" value={isPrivate ? '🔒 Закрытое' : '🌐 Открытое'} />
+            {vsBots && <SummaryItem label="Режим" value="🤖 Vs Bots" highlight />}
           </div>
           <div style={{ display: 'flex', gap: '1rem', flexShrink: 0 }}>
             <button

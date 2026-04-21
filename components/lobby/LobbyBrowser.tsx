@@ -15,7 +15,18 @@ const COLS = [
   { key: 'bet',     label: 'Ставка',      flex: '1 1 0' },
   { key: 'slots',   label: 'Места',       flex: '0 0 8rem' },
   { key: 'prize',   label: 'В случае победы', flex: '1 1 0' },
+  { key: 'status',  label: 'Статус',      flex: '0 0 12rem' },
 ]
+
+function lobbyStatusBadge(s: string) {
+  switch (s) {
+    case 'Created':      return { label: 'Набор',      color: '#8D5EF4', bg: 'rgba(141,94,244,0.12)', dot: '#8D5EF4' }
+    case 'Pending':      return { label: 'Ожидание',   color: '#f59e0b', bg: 'rgba(245,158,11,0.12)',  dot: '#f59e0b' }
+    case 'Game started': return { label: 'Игра идёт',  color: '#22c55e', bg: 'rgba(34,197,94,0.12)',   dot: '#22c55e' }
+    case 'Error':        return { label: 'Ошибка',     color: '#ef4444', bg: 'rgba(239,68,68,0.12)',   dot: '#ef4444' }
+    default:             return { label: s,             color: 'rgba(255,255,255,0.3)', bg: 'rgba(255,255,255,0.06)', dot: 'rgba(255,255,255,0.3)' }
+  }
+}
 
 interface LobbyBrowserProps {
   initialLobbies: Lobby[]
@@ -268,6 +279,14 @@ export function LobbyBrowser({ initialLobbies }: LobbyBrowserProps) {
                 </div>
                 <div className="lb-cell" style={{ flex: '1 1 0', fontSize: '1.4rem', fontWeight: 700, color: '#22c55e', fontFamily: "'Gotham Pro', sans-serif" }}>
                   +{((lobby.bet ?? 0) * commissionPercent).toFixed(0)} ₸
+                </div>
+                <div className="lb-cell" style={{ flex: '0 0 12rem' }}>
+                  {(() => { const b = lobbyStatusBadge(lobby.status); return (
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', padding: '0.3rem 0.9rem', borderRadius: '2rem', background: b.bg, fontSize: '1.1rem', fontWeight: 700, color: b.color, fontFamily: "'Gotham Pro', sans-serif", letterSpacing: '0.04em' }}>
+                      <span style={{ width: '0.45rem', height: '0.45rem', borderRadius: '50%', background: b.dot, boxShadow: `0 0 5px ${b.dot}`, flexShrink: 0, display: 'inline-block' }} />
+                      {b.label}
+                    </span>
+                  )})()}
                 </div>
               </div>
             ))
