@@ -84,6 +84,13 @@ export function AuthModals({ modal, setModal }: AuthModalsProps) {
 
   if (!modal) return null
 
+  const CHAR_CFG = {
+    signin:  { src: '/images/redesign/carousel-decoration-10.png',  title: 'Вход',            tagline: 'Добро пожаловать назад' },
+    signup:  { src: '/images/redesign/carousel-decoration-11.png', title: 'Регистрация',     tagline: 'Легенды сражаются здесь' },
+    recover: { src: '/images/redesign/carousel-decoration-6.png',  title: 'Восстановление', tagline: 'Восстановим доступ' },
+  }
+  const { src: charSrc, title: modalTitle, tagline } = CHAR_CFG[modal]
+
   return (
     <div
       onClick={close}
@@ -100,122 +107,239 @@ export function AuthModals({ modal, setModal }: AuthModalsProps) {
         WebkitBackdropFilter: 'blur(16px)',
       }}
     >
-      {/* Modal card */}
+      {/* Split modal */}
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
           width: '100%',
-          maxWidth: '44rem',
-          background: 'linear-gradient(160deg, rgba(18,14,30,0.98) 0%, rgba(12,10,20,0.98) 100%)',
-          border: '1px solid rgba(141,94,244,0.25)',
+          maxWidth: '84rem',
+          display: 'flex',
           borderRadius: '2.4rem',
-          padding: '4rem 4rem 3.6rem',
-          position: 'relative',
-          boxShadow: '0 0 0 1px rgba(141,94,244,0.08), 0 24px 80px rgba(0,0,0,0.7), 0 0 60px rgba(141,94,244,0.12)',
+          overflow: 'hidden',
+          border: '1px solid rgba(141,94,244,0.25)',
+          boxShadow: '0 0 0 1px rgba(141,94,244,0.08), 0 24px 80px rgba(0,0,0,0.7), 0 0 80px rgba(141,94,244,0.15)',
           animation: 'modalSlideUp 0.3s cubic-bezier(0.34,1.56,0.64,1)',
         }}
       >
-        {/* Purple corner glow */}
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: '1px',
-          background: 'linear-gradient(90deg, transparent 0%, rgba(141,94,244,0.6) 50%, transparent 100%)',
-          borderRadius: '2.4rem 2.4rem 0 0',
-        }} />
-        <div style={{
-          position: 'absolute',
-          top: '-6rem',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '24rem',
-          height: '12rem',
-          background: 'radial-gradient(ellipse, rgba(141,94,244,0.2) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }} />
-
-        {/* Close button */}
-        <button
-          onClick={close}
+        {/* ── LEFT: Character panel ── */}
+        <div
+          className="auth-char-panel"
           style={{
-            position: 'absolute',
-            top: '2rem',
-            right: '2rem',
-            width: '3.6rem',
-            height: '3.6rem',
-            borderRadius: '50%',
-            background: 'rgba(255,255,255,0.06)',
-            border: '1px solid rgba(255,255,255,0.1)',
-            color: 'rgba(255,255,255,0.5)',
-            fontSize: '1.8rem',
-            lineHeight: 1,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'pointer',
-            transition: 'all 0.2s',
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.background = 'rgba(141,94,244,0.2)'
-            e.currentTarget.style.borderColor = 'rgba(141,94,244,0.5)'
-            e.currentTarget.style.color = '#fff'
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.background = 'rgba(255,255,255,0.06)'
-            e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'
-            e.currentTarget.style.color = 'rgba(255,255,255,0.5)'
+            width: '38%',
+            flexShrink: 0,
+            position: 'relative',
+            overflow: 'hidden',
+            background: 'linear-gradient(160deg, rgba(22,14,46,1) 0%, rgba(8,5,18,1) 100%)',
           }}
         >
-          ×
-        </button>
+          {/* Logo + modal title at top */}
+          <div style={{
+            position: 'absolute',
+            top: '3rem',
+            left: 0, right: 0,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '1.2rem',
+            zIndex: 4,
+          }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/logo.svg"
+              alt="CyberT"
+              style={{ height: '2.8rem', filter: 'drop-shadow(0 0 14px rgba(141,94,244,0.7))' }}
+            />
+            <div style={{
+              fontSize: '1.1rem',
+              fontWeight: 700,
+              fontFamily: "'Colus', 'Gotham Pro', sans-serif",
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              background: 'linear-gradient(135deg, #fff 0%, #C9AAFF 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}>{modalTitle}</div>
+          </div>
 
-        {/* Logo */}
-        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '2.8rem' }}>
+          {/* Ambient orb behind char */}
+          <div style={{
+            position: 'absolute',
+            bottom: '-6rem',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '36rem',
+            height: '36rem',
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(141,94,244,0.4) 0%, transparent 65%)',
+            pointerEvents: 'none',
+          }} />
+          {/* Secondary top orb */}
+          <div style={{
+            position: 'absolute',
+            top: '-4rem',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '20rem',
+            height: '20rem',
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(141,94,244,0.15) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }} />
+
+          {/* Character image */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/logo.svg"
-            alt="CyberT"
-            style={{ height: '3rem', filter: 'drop-shadow(0 0 12px rgba(141,94,244,0.6))' }}
+            key={charSrc}
+            src={charSrc}
+            alt=""
+            draggable={false}
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              height: '92%',
+              width: 'auto',
+              maxWidth: '160%',
+              objectFit: 'contain',
+              objectPosition: 'bottom center',
+              userSelect: 'none',
+              filter: 'drop-shadow(0 0 24px rgba(141,94,244,0.45))',
+              zIndex: 1,
+            }}
           />
+
+          {/* Top fade so char blends into panel bg */}
+          <div style={{
+            position: 'absolute',
+            top: 0, left: 0, right: 0,
+            height: '14rem',
+            background: 'linear-gradient(to bottom, rgba(22,14,46,1) 0%, transparent 100%)',
+            pointerEvents: 'none',
+            zIndex: 2,
+          }} />
+
+          {/* Right edge separator */}
+          <div style={{
+            position: 'absolute',
+            top: 0, right: 0, bottom: 0,
+            width: '1px',
+            background: 'linear-gradient(to bottom, transparent, rgba(141,94,244,0.35), transparent)',
+            zIndex: 3,
+          }} />
+
+          {/* Bottom tagline */}
+          <div style={{
+            position: 'absolute',
+            bottom: '2.4rem',
+            left: 0, right: 0,
+            textAlign: 'center',
+            zIndex: 3,
+            padding: '0 2rem',
+          }}>
+            <p style={{
+              margin: 0,
+              fontSize: '1.05rem',
+              color: '#C9AAFF',
+              fontFamily: "'Gotham Pro', sans-serif",
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              textShadow: '0 0 12px rgba(141,94,244,0.8)',
+            }}>{tagline}</p>
+          </div>
         </div>
 
-        {modal === 'signin' && (
-          <ModalSignIn
-            error={error}
-            success={success}
-            loading={loading}
-            onSubmit={handleSignIn}
-            onRecover={() => { setModal('recover'); setError(''); setSuccess('') }}
-            onSignUp={openSignUp}
-          />
-        )}
+        {/* ── RIGHT: Form panel ── */}
+        <div style={{
+          flex: 1,
+          background: 'linear-gradient(160deg, rgba(18,14,30,1) 0%, rgba(12,10,20,1) 100%)',
+          padding: '4rem 4rem 3.6rem',
+          position: 'relative',
+          minWidth: 0,
+        }}>
+          {/* Top accent line */}
+          <div style={{
+            position: 'absolute',
+            top: 0, left: 0, right: 0,
+            height: '1px',
+            background: 'linear-gradient(90deg, rgba(141,94,244,0.3) 0%, rgba(141,94,244,0.6) 50%, transparent 100%)',
+          }} />
+          {/* Top glow blob */}
+          <div style={{
+            position: 'absolute',
+            top: '-6rem', right: '20%',
+            width: '24rem', height: '12rem',
+            background: 'radial-gradient(ellipse, rgba(141,94,244,0.18) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }} />
 
-        {modal === 'signup' && (
-          <ModalSignUp
-            error={error}
-            loading={loading}
-            onSubmit={handleSignUp}
-            onSignIn={openSignIn}
-          />
-        )}
+          {/* Close button */}
+          <button
+            onClick={close}
+            style={{
+              position: 'absolute',
+              top: '2rem', right: '2rem',
+              width: '3.6rem', height: '3.6rem',
+              borderRadius: '50%',
+              background: 'rgba(255,255,255,0.06)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              color: 'rgba(255,255,255,0.5)',
+              fontSize: '1.8rem',
+              lineHeight: 1,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'rgba(141,94,244,0.2)'
+              e.currentTarget.style.borderColor = 'rgba(141,94,244,0.5)'
+              e.currentTarget.style.color = '#fff'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'rgba(255,255,255,0.06)'
+              e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'
+              e.currentTarget.style.color = 'rgba(255,255,255,0.5)'
+            }}
+          >×</button>
 
-        {modal === 'recover' && (
-          <ModalRecover
-            error={error}
-            success={success}
-            loading={loading}
-            onSubmit={handleRecover}
-            onSignIn={openSignIn}
-          />
-        )}
+          {modal === 'signin' && (
+            <ModalSignIn
+              error={error}
+              success={success}
+              loading={loading}
+              onSubmit={handleSignIn}
+              onRecover={() => { setModal('recover'); setError(''); setSuccess('') }}
+              onSignUp={openSignUp}
+            />
+          )}
+          {modal === 'signup' && (
+            <ModalSignUp
+              error={error}
+              loading={loading}
+              onSubmit={handleSignUp}
+              onSignIn={openSignIn}
+            />
+          )}
+          {modal === 'recover' && (
+            <ModalRecover
+              error={error}
+              success={success}
+              loading={loading}
+              onSubmit={handleRecover}
+              onSignIn={openSignIn}
+            />
+          )}
+        </div>
       </div>
 
       <style>{`
         @keyframes modalSlideUp {
           from { opacity: 0; transform: translateY(24px) scale(0.97); }
           to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @media (max-width: 600px) {
+          .auth-char-panel { display: none !important; }
         }
         input:-webkit-autofill,
         input:-webkit-autofill:hover,

@@ -2,7 +2,7 @@ export function LandingFooter() {
   const year = new Date().getFullYear()
 
   return (
-    <footer style={{ position: 'relative', padding: '6.4rem 2.4rem', background: 'rgba(0,0,0,0.6)', width: '100%', boxSizing: 'border-box' }}>
+    <footer style={{ position: 'relative', padding: '6.4rem 2.4rem', background: 'rgba(0,0,0,0.6)', width: '100%', boxSizing: 'border-box', overflow: 'hidden' }}>
       {/* Top gradient line */}
       <div style={{
         position: 'absolute',
@@ -12,6 +12,44 @@ export function LandingFooter() {
         height: '1px',
         background: 'linear-gradient(90deg, rgba(141,94,244,0) 0%, rgba(141,94,244,0.6) 50%, rgba(141,94,244,0) 100%)',
       }} />
+
+      {/* Character rising from bottom-right */}
+      <div style={{
+        position: 'absolute',
+        bottom: 0,
+        right: '4%',
+        width: '28rem',
+        pointerEvents: 'none',
+        zIndex: 0,
+      }}>
+        {/* Glow orb under char */}
+        <div style={{
+          position: 'absolute',
+          bottom: '-4rem',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '28rem',
+          height: '28rem',
+          borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(141,94,244,0.25) 0%, transparent 65%)',
+        }} />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/redesign/carousel-decoration-6.png"
+          alt=""
+          draggable={false}
+          style={{
+            display: 'block',
+            width: '100%',
+            height: 'auto',
+            objectFit: 'contain',
+            objectPosition: 'bottom',
+            filter: 'drop-shadow(0 0 20px rgba(141,94,244,0.35))',
+            maskImage: 'linear-gradient(to top, rgba(0,0,0,1) 40%, rgba(0,0,0,0.3) 75%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to top, rgba(0,0,0,1) 40%, rgba(0,0,0,0.3) 75%, transparent 100%)',
+          }}
+        />
+      </div>
 
       <div style={{
         maxWidth: '1400px',
@@ -23,6 +61,8 @@ export function LandingFooter() {
         alignItems: 'flex-start',
         gap: '4rem',
         boxSizing: 'border-box',
+        position: 'relative',
+        zIndex: 1,
       }}>
         {/* Left — legal */}
         <div style={{ flex: '1 1 300px', maxWidth: '600px' }}>

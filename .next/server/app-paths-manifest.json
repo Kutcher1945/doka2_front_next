@@ -1,4 +1,9 @@
 {
   "/api/auth/[...nextauth]/route": "app/api/auth/[...nextauth]/route.js",
-  "/page": "app/page.js"
+  "/api/auth/steam/route": "app/api/auth/steam/route.js",
+  "/api/auth/steam/callback/route": "app/api/auth/steam/callback/route.js",
+  "/page": "app/page.js",
+  "/cabinet/page": "app/cabinet/page.js",
+  "/cabinet/profile/page": "app/cabinet/profile/page.js",
+  "/cabinet/lobby/page": "app/cabinet/lobby/page.js"
 }
