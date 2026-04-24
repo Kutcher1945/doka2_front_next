@@ -41,7 +41,8 @@ export interface Lobby {
   datetime_start_game: string | null
   datetime_finish_game: string | null
   vs_bots: boolean
-  dota_lobby_id: number | null
+  dota_lobby_id: string | null
+  bot_steam_id: string | null
 }
 
 export interface Membership {
@@ -65,9 +66,17 @@ export interface PlayerInfo {
   game_commission: number
 }
 
+export interface GameHistoryLobby {
+  id: number
+  name: string
+  bet: number
+  status: string
+}
+
 export interface GameHistory {
   id: number
   lobby_link: number
+  lobby: GameHistoryLobby | null
   start_game: string
   finish_game: string
   result: string | null

@@ -19,7 +19,8 @@ async function getServerData(token: string) {
     ])
 
     const user = userRes.status === 'fulfilled' ? userRes.value.data as User : null
-    const wallet = walletRes.status === 'fulfilled' ? walletRes.value.data as UserWallet : null
+    const walletData = walletRes.status === 'fulfilled' ? walletRes.value.data : null
+    const wallet: UserWallet | null = Array.isArray(walletData) ? (walletData[0] ?? null) : (walletData as UserWallet | null)
 
     return { user, wallet }
   } catch {

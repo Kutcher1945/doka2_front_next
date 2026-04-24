@@ -28,6 +28,7 @@ export function LobbyRoom({ initialLobby, initialMembers, similarLobbies }: Lobb
   const [showResultsModal, setShowResultsModal] = useState(false)
   const [toast, setToast] = useState<string | null>(null)
   const [countdown, setCountdown] = useState<number | null>(null)
+  const [dotaLaunching, setDotaLaunching] = useState(false)
   const pollingRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const countdownRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
@@ -83,10 +84,10 @@ export function LobbyRoom({ initialLobby, initialMembers, similarLobbies }: Lobb
           await refreshLobby()
           setShowResultsModal(true)
           setCurrentLobby(null)
-        } else if (updated.status === 'Created') {
-          // Lobby was reset (someone left) — stop polling
+        } else if (updated.status === 'Created' || updated.status === 'Error') {
           clearInterval(pollingRef.current!)
           pollingRef.current = null
+          setCurrentLobby(null)
         }
       } catch { /* ignore */ }
     }, 2000)
@@ -94,7 +95,13 @@ export function LobbyRoom({ initialLobby, initialMembers, similarLobbies }: Lobb
 
   const startCountdown = useCallback(() => {
     setCountdown(10)
-    countdownRef.current = setInterval(() => {
+    countdownRef.current = setInterval(async () => {
+      // Poll lobby every tick so dota_lobby_id appears on overlay ASAP
+      try {
+        const res = await lobbyApi.get(lobby.id)
+        setLobby(res.data)
+      } catch { /* ignore */ }
+
       setCountdown(prev => {
         if (prev === null || prev <= 1) {
           clearInterval(countdownRef.current!)
@@ -106,7 +113,7 @@ export function LobbyRoom({ initialLobby, initialMembers, similarLobbies }: Lobb
         return prev - 1
       })
     }, 1000)
-  }, [startPolling])
+  }, [startPolling, lobby.id])
 
   const { send } = useLobbySocket(lobby.id, useCallback(async (msg: LobbySocketMessage) => {
     if (msg.data.success) {
@@ -343,7 +350,7 @@ export function LobbyRoom({ initialLobby, initialMembers, similarLobbies }: Lobb
           </div>
 
           {/* Action buttons */}
-          {(lobby.status === 'Created' || lobby.status === 'Pending' || lobby.status === 'Game started') && (
+          {(lobby.status === 'Created' || lobby.status === 'Pending' || lobby.status === 'Game started' || lobby.status === 'Error') && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.7rem' }}>
 
               {/* Ready button — shown when lobby is full and user hasn't confirmed yet */}
@@ -373,17 +380,58 @@ export function LobbyRoom({ initialLobby, initialMembers, similarLobbies }: Lobb
                 </button>
               )}
 
-              {/* Open in Dota 2 button */}
-              {lobby.dota_lobby_id && (lobby.status === 'Pending' || lobby.status === 'Game started') && (
-                <a
-                  href={`steam://joinlobby/570/${lobby.dota_lobby_id}`}
-                  style={{ width: '100%', padding: '1.1rem 1.4rem', borderRadius: '1rem', background: 'linear-gradient(135deg, rgba(141,94,244,0.2) 0%, rgba(185,153,253,0.12) 100%)', border: '1px solid rgba(141,94,244,0.4)', color: '#B999FD', fontSize: '1.3rem', fontWeight: 700, fontFamily: "'Gotham Pro', sans-serif", cursor: 'pointer', transition: 'all 0.15s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.7rem', textDecoration: 'none', boxShadow: '0 4px 20px rgba(141,94,244,0.15)' }}
-                  onMouseEnter={e => { e.currentTarget.style.background = 'linear-gradient(135deg, rgba(141,94,244,0.35) 0%, rgba(185,153,253,0.2) 100%)'; e.currentTarget.style.borderColor = 'rgba(141,94,244,0.7)'; e.currentTarget.style.boxShadow = '0 6px 28px rgba(141,94,244,0.3)' }}
-                  onMouseLeave={e => { e.currentTarget.style.background = 'linear-gradient(135deg, rgba(141,94,244,0.2) 0%, rgba(185,153,253,0.12) 100%)'; e.currentTarget.style.borderColor = 'rgba(141,94,244,0.4)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(141,94,244,0.15)' }}
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                  Открыть в Dota 2
-                </a>
+              {/* Open in Dota 2 / join info */}
+              {lobby.dota_lobby_id && lobby.bot_steam_id && (lobby.status === 'Pending' || lobby.status === 'Game started') && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
+                  {!dotaLaunching ? (
+                  <>
+                  <button
+                    onClick={() => {
+                      window.open('steam://rungameid/570', '_blank')
+                      setDotaLaunching(true)
+                    }}
+                    style={{ width: '100%', padding: '1.1rem 1.4rem', borderRadius: '1rem', background: 'linear-gradient(135deg, rgba(141,94,244,0.2) 0%, rgba(185,153,253,0.12) 100%)', border: '1px solid rgba(141,94,244,0.4)', color: '#B999FD', fontSize: '1.3rem', fontWeight: 700, fontFamily: "'Gotham Pro', sans-serif", cursor: 'pointer', transition: 'all 0.15s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.7rem', boxSizing: 'border-box' }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'linear-gradient(135deg, rgba(141,94,244,0.35) 0%, rgba(185,153,253,0.2) 100%)'; e.currentTarget.style.borderColor = 'rgba(141,94,244,0.7)' }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'linear-gradient(135deg, rgba(141,94,244,0.2) 0%, rgba(185,153,253,0.12) 100%)'; e.currentTarget.style.borderColor = 'rgba(141,94,244,0.4)' }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    Открыть в Dota 2
+                  </button>
+                  <div style={{ padding: '1rem 1.2rem', borderRadius: '0.9rem', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                    <div style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.25)', fontFamily: "'Gotham Pro', sans-serif", marginBottom: '0.6rem', letterSpacing: '0.08em', textTransform: 'uppercase' }}>Войти вручную в Dota 2</div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.3)', fontFamily: "'Gotham Pro', sans-serif" }}>Название</span>
+                        <span style={{ fontSize: '1.15rem', fontWeight: 700, color: 'rgba(255,255,255,0.7)', fontFamily: "'Gotham Pro', sans-serif" }}>CyberT | {lobby.name}</span>
+                      </div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.3)', fontFamily: "'Gotham Pro', sans-serif" }}>Пароль</span>
+                        <span style={{ fontSize: '1.35rem', fontWeight: 900, color: '#B999FD', fontFamily: "'Colus', 'Gotham Pro', sans-serif", letterSpacing: '0.1em' }}>{lobby.id}</span>
+                      </div>
+                    </div>
+                    <div style={{ marginTop: '0.7rem', fontSize: '1rem', color: 'rgba(255,255,255,0.15)', fontFamily: "'Gotham Pro', sans-serif", lineHeight: 1.5 }}>
+                      Игра → Пользовательские лобби → найти по названию
+                    </div>
+                  </div>
+                  </>
+                  ) : (
+                  <>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.7rem', padding: '0.9rem 1.2rem', borderRadius: '0.9rem', background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.2)', color: '#f59e0b', fontSize: '1.15rem', fontFamily: "'Gotham Pro', sans-serif" }}>
+                      <div style={{ width: '0.9rem', height: '0.9rem', borderRadius: '50%', border: '2px solid rgba(245,158,11,0.4)', borderTopColor: '#f59e0b', animation: 'spin 1s linear infinite', flexShrink: 0 }} />
+                      Ждите главного меню Dota 2
+                    </div>
+                    <button
+                      onClick={() => { window.location.href = `steam://joinlobby/570/${lobby.dota_lobby_id}/${lobby.bot_steam_id}` }}
+                      style={{ width: '100%', padding: '1.1rem 1.4rem', borderRadius: '1rem', background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)', border: 'none', color: '#fff', fontSize: '1.3rem', fontWeight: 700, fontFamily: "'Gotham Pro', sans-serif", cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.7rem', boxShadow: '0 4px 16px rgba(34,197,94,0.35)', boxSizing: 'border-box' }}
+                      onMouseEnter={e => { e.currentTarget.style.opacity = '0.9' }}
+                      onMouseLeave={e => { e.currentTarget.style.opacity = '1' }}
+                    >
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      Войти в лобби
+                    </button>
+                  </>
+                  )}
+                </div>
               )}
 
               <button
@@ -395,7 +443,7 @@ export function LobbyRoom({ initialLobby, initialMembers, similarLobbies }: Lobb
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
                 Список лобби
               </button>
-              {userInLobby && (lobby.status === 'Created' || lobby.status === 'Pending') && (
+              {userInLobby && lobby.status !== 'Finished' && (
                 <button
                   onClick={leaveLobby}
                   style={{ width: '100%', padding: '1rem 1.4rem', borderRadius: '1rem', border: '1px solid rgba(239,68,68,0.2)', background: 'rgba(239,68,68,0.04)', color: 'rgba(239,68,68,0.7)', fontSize: '1.25rem', fontFamily: "'Gotham Pro', sans-serif", cursor: 'pointer', transition: 'all 0.15s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.6rem' }}
@@ -481,7 +529,7 @@ export function LobbyRoom({ initialLobby, initialMembers, similarLobbies }: Lobb
               </div>
             </div>
             {/* Player ready list */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', maxWidth: '36rem', margin: '0 auto' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', maxWidth: '36rem', margin: '0 auto 2rem' }}>
               {members.map((m) => (
                 <div key={m.user_id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.8rem 1.4rem', borderRadius: '0.9rem', background: m.status ? 'rgba(34,197,94,0.07)' : 'rgba(255,255,255,0.03)', border: `1px solid ${m.status ? 'rgba(34,197,94,0.18)' : 'rgba(255,255,255,0.05)'}` }}>
                   <span style={{ fontSize: '1.25rem', color: 'rgba(255,255,255,0.65)', fontFamily: "'Gotham Pro', sans-serif" }}>Игрок #{m.user_id}</span>
@@ -493,6 +541,48 @@ export function LobbyRoom({ initialLobby, initialMembers, similarLobbies }: Lobb
                 </div>
               ))}
             </div>
+
+            {/* Join Dota 2 button on the overlay itself */}
+            {lobby.dota_lobby_id && lobby.bot_steam_id ? (
+              <div style={{ maxWidth: '36rem', width: '100%', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                {!dotaLaunching ? (
+                  <button
+                    onClick={() => {
+                      window.open('steam://rungameid/570', '_blank')
+                      setDotaLaunching(true)
+                    }}
+                    style={{ width: '100%', padding: '1.4rem', borderRadius: '1.1rem', background: 'linear-gradient(135deg, #8D5EF4 0%, #B999FD 100%)', border: 'none', color: '#fff', fontSize: '1.5rem', fontWeight: 700, fontFamily: "'Colus', 'Gotham Pro', sans-serif", cursor: 'pointer', letterSpacing: '0.06em', boxShadow: '0 4px 24px rgba(141,94,244,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem' }}
+                    onMouseEnter={e => { e.currentTarget.style.opacity = '0.9' }}
+                    onMouseLeave={e => { e.currentTarget.style.opacity = '1' }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    Открыть Dota 2
+                  </button>
+                ) : (
+                  <>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', padding: '1rem 1.4rem', borderRadius: '0.9rem', background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.2)', color: '#f59e0b', fontSize: '1.2rem', fontFamily: "'Gotham Pro', sans-serif" }}>
+                      <div style={{ width: '1rem', height: '1rem', borderRadius: '50%', border: '2px solid rgba(245,158,11,0.4)', borderTopColor: '#f59e0b', animation: 'spin 1s linear infinite', flexShrink: 0 }} />
+                      Дождитесь главного меню Dota 2
+                    </div>
+                    <button
+                      onClick={() => { window.location.href = `steam://joinlobby/570/${lobby.dota_lobby_id}/${lobby.bot_steam_id}` }}
+                      style={{ width: '100%', padding: '1.4rem', borderRadius: '1.1rem', background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)', border: 'none', color: '#fff', fontSize: '1.5rem', fontWeight: 700, fontFamily: "'Colus', 'Gotham Pro', sans-serif", cursor: 'pointer', letterSpacing: '0.06em', boxShadow: '0 4px 24px rgba(34,197,94,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.8rem' }}
+                      onMouseEnter={e => { e.currentTarget.style.opacity = '0.9' }}
+                      onMouseLeave={e => { e.currentTarget.style.opacity = '1' }}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                      Войти в лобби
+                    </button>
+                  </>
+                )}
+              </div>
+            ) : (
+              <div style={{ maxWidth: '36rem', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', color: 'rgba(255,255,255,0.3)', fontSize: '1.2rem', fontFamily: "'Gotham Pro', sans-serif" }}>
+                <div style={{ width: '1.2rem', height: '1.2rem', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.2)', borderTopColor: 'rgba(255,255,255,0.6)', animation: 'spin 1s linear infinite', flexShrink: 0 }} />
+                Бот создаёт лобби...
+                <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+              </div>
+            )}
           </div>
         </div>
       )}

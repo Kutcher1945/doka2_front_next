@@ -262,7 +262,7 @@ export default async function CabinetPage() {
                     <span style={{ fontSize: '1rem', color: 'rgba(255,255,255,0.2)', fontFamily: "'Gotham Pro', sans-serif" }}>#{h.id}</span>
                   </div>
                   <div style={{ fontSize: '1.15rem', color: 'rgba(255,255,255,0.3)', fontFamily: "'Gotham Pro', sans-serif" }}>
-                    {new Date(h.start_game).toLocaleDateString('ru-RU', { day: '2-digit', month: 'short', year: 'numeric' })}
+                    {h.finish_game ? new Date(h.finish_game).toLocaleDateString('ru-RU', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'}
                   </div>
                   <div style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.18)', fontFamily: "'Gotham Pro', sans-serif" }}>
                     Лобби {h.lobby_link ?? '—'}

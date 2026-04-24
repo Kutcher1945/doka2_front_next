@@ -36,6 +36,8 @@ export const authApi = {
     api.post('/auth/restore_password/submit/', { token, password, password_copy }),
   changePassword: (old_password: string, new_password: string, new_password_copy: string, headers?: Record<string, string>) =>
     api.post('/auth/change_password/', { old_password, new_password, new_password_copy }, { headers }),
+  disconnectSteam: (headers?: Record<string, string>) =>
+    api.post('/auth/steam/disconnect/', {}, { headers }),
 }
 
 // Dota / Lobby

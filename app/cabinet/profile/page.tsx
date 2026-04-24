@@ -266,7 +266,7 @@ export default async function ProfilePage() {
                     <div style={{ width: '0.3rem', height: '3rem', borderRadius: '0.2rem', background: isWin ? '#22c55e' : isLoss ? '#ef4444' : 'rgba(255,255,255,0.1)', flexShrink: 0 }} />
                     <div>
                       <div style={{ fontSize: '1.3rem', fontWeight: 600, color: isWin ? '#22c55e' : isLoss ? '#ef4444' : 'rgba(255,255,255,0.3)' }}>{isWin ? 'Победа' : isLoss ? 'Поражение' : 'Неизвестно'}</div>
-                      <div style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.22)', marginTop: '0.2rem' }}>{new Date(game.start_game).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' })}</div>
+                      <div style={{ fontSize: '1.1rem', color: 'rgba(255,255,255,0.22)', marginTop: '0.2rem' }}>{game.finish_game ? new Date(game.finish_game).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—'}</div>
                     </div>
                     <div style={{ fontSize: '1.2rem', color: 'rgba(255,255,255,0.22)' }}>{game.players_info?.length ?? 0} игр.</div>
                     <div style={{ fontSize: '1.2rem', color: 'rgba(255,255,255,0.18)' }}>#{game.lobby_link}</div>

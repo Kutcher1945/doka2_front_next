@@ -72,7 +72,7 @@ export default async function HistoryPage() {
                 borderBottom: i < history.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
               }}>
                 <div style={{ fontSize: '1.3rem', color: 'rgba(255,255,255,0.35)', fontFamily: "'Gotham Pro', sans-serif" }}>
-                  {new Date(game.start_game).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                  {game.finish_game ? new Date(game.finish_game).toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '—'}
                 </div>
                 <div style={{ fontSize: '1.3rem', color: 'rgba(255,255,255,0.3)', fontFamily: "'Gotham Pro', sans-serif" }}>
                   #{game.lobby_link}

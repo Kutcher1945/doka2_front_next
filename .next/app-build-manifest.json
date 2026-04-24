@@ -31,6 +31,31 @@
       "static/chunks/main-app.js",
       "static/chunks/app/cabinet/profile/page.js"
     ],
+    "/cabinet/friends/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/cabinet/friends/page.js"
+    ],
+    "/cabinet/lobby/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/cabinet/lobby/page.js"
+    ],
+    "/cabinet/wallet/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/cabinet/wallet/page.js"
+    ],
+    "/cabinet/history/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/cabinet/history/page.js"
+    ],
+    "/cabinet/support/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/cabinet/support/page.js"
+    ],
     "/api/auth/steam/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -41,10 +66,10 @@
       "static/chunks/main-app.js",
       "static/chunks/app/api/auth/steam/callback/route.js"
     ],
-    "/cabinet/lobby/page": [
+    "/cabinet/profile/settings/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/cabinet/lobby/page.js"
+      "static/chunks/app/cabinet/profile/settings/page.js"
     ]
   }
 }

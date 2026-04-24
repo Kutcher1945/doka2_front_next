@@ -94,24 +94,26 @@ export function LobbyBrowser({ initialLobbies }: LobbyBrowserProps) {
             Найдите игру и присоединяйтесь
           </p>
         </div>
-        <Link
-          href="/cabinet/lobby/create"
-          style={{
-            display: 'flex', alignItems: 'center', gap: '0.8rem',
-            padding: '1.1rem 2.4rem', borderRadius: '1rem',
-            background: 'linear-gradient(135deg, #8D5EF4 0%, #6B3FD4 100%)',
-            color: '#fff', fontSize: '1.4rem', fontWeight: 700,
-            fontFamily: "'Gotham Pro', sans-serif",
-            textDecoration: 'none',
-            boxShadow: '0 4px 20px rgba(141,94,244,0.35)',
-            transition: 'all 0.2s',
-          }}
-        >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-          </svg>
-          Создать лобби
-        </Link>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+          <Link
+            href="/cabinet/lobby/history"
+            style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', padding: '1.1rem 1.8rem', borderRadius: '1rem', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.5)', fontSize: '1.3rem', fontFamily: "'Gotham Pro', sans-serif", textDecoration: 'none', transition: 'all 0.2s' }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.07)'; e.currentTarget.style.color = '#fff' }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.color = 'rgba(255,255,255,0.5)' }}
+          >
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            История
+          </Link>
+          <Link
+            href="/cabinet/lobby/create"
+            style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', padding: '1.1rem 2.4rem', borderRadius: '1rem', background: 'linear-gradient(135deg, #8D5EF4 0%, #6B3FD4 100%)', color: '#fff', fontSize: '1.4rem', fontWeight: 700, fontFamily: "'Gotham Pro', sans-serif", textDecoration: 'none', boxShadow: '0 4px 20px rgba(141,94,244,0.35)', transition: 'all 0.2s' }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            Создать лобби
+          </Link>
+        </div>
       </div>
 
       {/* Main card */}
